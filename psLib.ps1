@@ -230,7 +230,7 @@ function getPsSum ($process) {
 function getWsAll {
     # Get process WorkingSet eg. getWsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
     param(
-        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman")]
+        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64")]
         [string]
         $process 
     )
@@ -430,6 +430,9 @@ function startBaiduDisk {
 }
 function startSublimeText () {
     Start-Process 'E:\UserSoft\Sublime Text 3x64\sublime_text.exe' 
+}
+function startPostman {
+    Start-Process $Global:processPathHash.Postman
 }
 # program ->
 function ss ($i, $contextCnt = 0, $isCaseSensitive = $false) {
@@ -843,4 +846,8 @@ function deepMap {
     }
 
     $res;
+}
+function uploadComputerTime2 {
+    # from computer start to current
+    New-TimeSpan -End ([datetime]::Now) -Start (Get-Content E:\DataIn\SettingPowershell\tmpStartInfo.txt) -ErrorAction SilentlyContinue | Format-Table 
 }
