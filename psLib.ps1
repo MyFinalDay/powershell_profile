@@ -14,6 +14,7 @@ $Global:myPslibFilePath = @{
 }
 $Global:myWorkPathHash = @{
     appJs           = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\';
+    weChatTmpFile   = 'C:\Users\mydell\Documents\WeChat Files\wxid_fodh1nkdqos422\Files';
     tutorPlatform   = 'E:\DataIn\WorkFor\tutorPlatform\client\admin\src\components\backend';
     yjxy_wxapp      = 'E:\DataIn\WorkFor\yjxy-wxapp\admin\src\components';
     treatmentCheck  = 'E:\DataIn\WorkFor\treatmentCheck\client\src\components';
@@ -206,10 +207,10 @@ function hashTableConvertToObject {
 function logSizeHuman ($i) {
     # beautify  
     if ($i -ne $null) {
-        if ($i -gt 1Gb) {
+        if ($i -gt 0.9Gb) {
             $res = ($i / 1Gb).ToString('f2') + " GB"
         }
-        elseif ($i -gt 1Mb) {
+        elseif ($i -gt 0.9Mb) {
             $res = ($i / 1Mb).ToString('f1') + " MB"
         }
         elseif ($i -gt 1Kb) {
@@ -850,4 +851,16 @@ function deepMap {
 function uploadComputerTime2 {
     # from computer start to current
     New-TimeSpan -End ([datetime]::Now) -Start (Get-Content E:\DataIn\SettingPowershell\tmpStartInfo.txt) -ErrorAction SilentlyContinue | Format-Table 
+}
+function addFavoritePath {
+    # eg. addFavouritePath powershell, E:\DataIn\PowershellData
+    param(
+        [ValidateCount(0, 2)]
+        $pathArr
+    )
+    Add-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt  -Value ('"' + $pathArr[0] + '"' + ': ' + '"' + $pathArr[1] + '",') -Encoding UTF8
+    Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt | more
+}
+function getFavouritePath {
+    Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
 }
