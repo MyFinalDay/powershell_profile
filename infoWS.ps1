@@ -131,10 +131,10 @@ function extensionCount {
 function logSizeHuman ($i) {
     # beautify  
     if ($i -ne $null) {
-        if ($i -gt 1Gb) {
+        if ($i -gt 0.9Gb) {
             $res = ($i / 1Gb).ToString('f2') + " GB"
         }
-        elseif ($i -gt 1Mb) {
+        elseif ($i -gt 0.9Mb) {
             $res = ($i / 1Mb).ToString('f1') + " MB"
         }
         elseif ($i -gt 1Kb) {
@@ -160,7 +160,7 @@ function logWs {
     $firefoxWs = getProcessWs firefox
     $nodeWs = getProcessWs node
     $wechatdevtools = getProcessWs wechatdevtools
-    $EgretWing=getProcessWs EgretWing
+    $EgretWing = getProcessWs EgretWing
 
     if ($codeWs) {
         Add-Member -InputObject $logObj -Name "code" -Value (logSizeHuman($codeWs)) -MemberType NoteProperty
@@ -180,7 +180,7 @@ function logWs {
     if ($wechatdevtools) {
         Add-Member -InputObject $logObj -Name "wechatdevtools" -Value (logSizeHuman($wechatdevtools)) -MemberType NoteProperty
     }
-    if($EgretWing){
+    if ($EgretWing) {
         Add-Member -InputObject $logObj -Name "EgretWing" -Value (logSizeHuman($EgretWing)) -MemberType NoteProperty
     }
 
@@ -231,6 +231,8 @@ Write-Host " "
 historyCount 5
 
 $Global:startInfoTime = (Get-Date)
-node E:\DataIn\NodejsData\testWebpack\testSmall\src\utils\studyEnglish\studyComputerEnglish.js
+# node E:\DataIn\NodejsData\testWebpack\testSmall\src\utils\studyEnglish\studyComputerEnglish.js
+Get-Content E:\DataIn\NodejsData\testWebpack\testSmall\src\utils\studyEnglish\words.js -Encoding UTF8 |
+    Get-Random -Count 5 -ErrorAction SilentlyContinue | ForEach-Object {"  " + $_}
 # "`n`n"
 # extensionCount "C:\Users\mydell\Desktop" 5

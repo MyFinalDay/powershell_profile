@@ -13,12 +13,13 @@ $Global:myPslibFilePath = @{
     aliasFilePath = 'E:\DataIn\SettingPowershell\alias.csv';
 }
 $Global:myWorkPathHash = @{
-    appJs           = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\';
-    weChatTmpFile   = 'C:\Users\mydell\Documents\WeChat Files\wxid_fodh1nkdqos422\Files';
-    tutorPlatform   = 'E:\DataIn\WorkFor\tutorPlatform\client\admin\src\components\backend';
-    yjxy_wxapp      = 'E:\DataIn\WorkFor\yjxy-wxapp\admin\src\components';
-    treatmentCheck  = 'E:\DataIn\WorkFor\treatmentCheck\client\src\components';
-    sp_BusinessCard = 'E:\DataIn\WorkFor\sp-BusinessCard\app\model';
+    appJs               = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\';
+    weChatTmpFile       = 'C:\Users\mydell\Documents\WeChat Files\wxid_fodh1nkdqos422\Files';
+    tutorPlatform       = 'E:\DataIn\WorkFor\tutorPlatform\client\admin\src\components\backend';
+    yjxy_wxapp          = 'E:\DataIn\WorkFor\yjxy-wxapp\admin\src\components';
+    treatmentCheck      = 'E:\DataIn\WorkFor\treatmentCheck\client\src\components';
+    sp_BusinessCard     = 'E:\DataIn\WorkFor\sp-BusinessCard\app\model';
+    officialWebsite2018 = 'E:\DataIn\WorkFor\officialWebsite2018\client';
 }
 
 $Global:processPathHash = @{
@@ -116,7 +117,12 @@ function bubbleSort ([int[]]$inputArray) {
 #     return $leftResult += $rightResult
 # }
 
-function SimpleTranslate ($word) {
+function bdTranslate {
+    # tranlate chinese <-> english 
+    param(
+        $word
+    )
+    
     $timeStamp = [Long]([Double]::Parse((Get-Date -UFormat %s)) * 1000)
     $appid = "2015063000000001"
     $key = "12345678"
@@ -148,9 +154,16 @@ function SimpleTranslate ($word) {
     $url = "http://api.fanyi.baidu.com/api/trans/vip/translate?" + $querystring
     $rsp = Invoke-WebRequest $url | ConvertFrom-Json
 
-    Write-Output " "
-    Write-Output $rsp.trans_result[0].dst.padLeft(30) 
-    Write-Output " "
+    $rsp.trans_result[0].dst
+}
+function SimpleTranslate ($word) {
+    Write-Host " "
+    $res = bdTranslate $word
+    $res | clip
+    $res
+    Write-Host " "
+    bdTranslate $res
+    Write-Host " "
 }
 
 function helpAndExample () {
@@ -753,6 +766,18 @@ function bd {
         Start-Process https://www.baidu.com/
     }
 }
+function bk {
+    # eg. bk powershell -> baidubaike search powershell
+    param(
+        $keyWord
+    )
+    if ($keyWord -ne $null) {
+        start-process https://baike.baidu.com/item/$keyWord
+    }
+    else {
+        Start-Process https://baike.baidu.com/
+    }
+}
 function g2 {
     # eg. g2 powershellAPI -> google.com search powershellAPI
     param(
@@ -861,6 +886,6 @@ function addFavoritePath {
     Add-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt  -Value ('"' + $pathArr[0] + '"' + ': ' + '"' + $pathArr[1] + '",') -Encoding UTF8
     Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt | more
 }
-function getFavouritePath {
-    Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
-}
+# function getFavouritePath {
+#     Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
+# }
