@@ -315,11 +315,11 @@ function killLastPS_quick {
     Get-Process $process | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process 
     $ErrorActionPreference = "Continue"
 }
-function lastPS () {
-    # Get process last start-up (not conatin Microsoft) eg. lastPS -> return 
+function lastPS_notContainMs () {
+    # Get process last start-up (not conatin Microsoft) eg. lastPS_notContainMs  -> return 
     $ErrorActionPreference = "SilentlyContinue"
     Get-Process | Sort-Object StartTime -Descending | Select-Object -First 60 |
-        Where-Object {$_.Company -ne $null} | Where-Object {$_.Company.ToString() -notmatch "Micro*"} | Get-Unique | 
+        Where-Object {$_.Company -ne "Microsoft Corporation" } | Get-Unique | 
         Format-Table Name, Id, @{Label = "  WS (MB)  "; Expression = {[System.Math]::Truncate($_.WS / 1Mb)}; alignment = "center";
     }, @{Name = "  StartTime  "; Expression = {($_.StartTime).ToString().split(' ')[1]}; alignment = "center";
     }, @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; }, MainWindowTitle
@@ -327,16 +327,24 @@ function lastPS () {
 }
 
 function lastPS_containMicrosoft () {
-    # Get process last start-up (conatin Microsoft) eg. lastPS -> return 
+    # Get process last start-up (conatin Microsoft) eg. lastPS_containMicrosoft -> return 
     $ErrorActionPreference = "SilentlyContinue"
-    $resultArr = Get-Process | Sort-Object StartTime -Descending | Select-Object -First 60 |
-        Where-Object {$_.Company -ne $null} |  Get-Unique | 
+    $resultArr = Get-Process | Sort-Object StartTime -Descending | Select-Object -First 60 | Get-Unique | 
         Format-Table Name, Id, @{n = "  startTime  "; e = {$_.startTime.ToString().Split(" ")[1]}; alignment = "center";
     } , @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; 
     } , @{n = "  WS (MB)  "; e = {$_.WS / 1Mb -as [int]}; }, MainWindowTitle
 
 
     $resultArr
+    $ErrorActionPreference = "Continue"
+}
+function lastPS {
+    # Get process last start-up ( has MainWindowTitle) eg. lastPS -> return 
+    $ErrorActionPreference = "SilentlyContinue"
+    Get-Process | Where-Object {$_.MainWindowTitle.ToString().Length -ne 0} | Sort-Object StartTime -Descending |
+        Format-Table Name, Id, @{Label = "  WS (MB)  "; Expression = {[System.Math]::Truncate($_.WS / 1Mb)}; alignment = "center";
+    }, @{Name = "  StartTime  "; Expression = {($_.StartTime).ToString().split(' ')[1]}; alignment = "center";
+    }, @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; }, MainWindowTitle
     $ErrorActionPreference = "Continue"
 }
 function convertToBinary ($i) {
