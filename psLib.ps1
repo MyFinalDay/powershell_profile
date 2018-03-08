@@ -2,7 +2,7 @@
 $Global:myStr1 = @"
  |^&_-+=$,;\)@~%`][<. ;:}{*!T>/o01OIl'
 "@
-$Global:usualPsArr = @("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman")
+$Global:usualPsArr = @("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "powershell_ise")
 $Global:sysToolsArr = @('winver', 'mspaint', 'magnify', 'charmap', 'msinfo32', 'resmon')
 $Global:myHash1 = @{level = 1; scope = "root"; isGlobal = $true; lang = @('powershell', 'C#')}
 # $Global:myPsFilePath = 'E:\DataIn\PowershellScriptData\psLib.ps1'
@@ -159,7 +159,36 @@ function bdTranslate {
 function SimpleTranslate ($word) {
     Write-Host " "
     $res = bdTranslate $word
-    $res | clip
+    if ([int[]][char[]]$word -ge 255) {
+        $res | clip
+    }
+    else {
+        $word | clip  
+    }
+    Write-Host "`t $res"
+    Write-Host " "
+    bdTranslate $res
+    Write-Host " "
+}
+function bdTranslateAntNote {
+    # translate, clip, note
+    param(
+        $word
+    )
+    Write-Host " "
+    $res = bdTranslate $word
+    if ([int[]][char[]]$word -ge 255) {
+        $res | clip
+        if ((Get-ChildItem E:\DataIn\MyNote\tmpEnglish.js | Select-String $res) -eq $null) {
+            addEnglishWords $res, $word
+        }
+    }
+    else {
+        $word | clip  
+        if ((Get-ChildItem E:\DataIn\MyNote\tmpEnglish.js | Select-String $word) -eq $null) {
+            addEnglishWords $word, $res
+        }
+    }
     $res
     Write-Host " "
     bdTranslate $res
@@ -244,7 +273,7 @@ function getPsSum ($process) {
 function getWsAll {
     # Get process WorkingSet eg. getWsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
     param(
-        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64")]
+        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64", "powershell_ise")]
         [string]
         $process 
     )
@@ -889,3 +918,44 @@ function addFavoritePath {
 # function getFavouritePath {
 #     Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
 # }
+function addBrackets {
+    param(
+        [string]
+        $word
+    ) 
+
+    "(" + $word + ")" | clip
+    "(" + $word + ")" 
+}
+function getType2 {
+    param(
+        [string]
+        $word
+    ) 
+    $res = addBrackets $word
+    $res = $res + ".GetType()"
+    $res | clip
+    $res
+}
+function riRecent {
+    # move recnetly $cnt file to reclycleBin eg. riRecnet 3 -> recycleBin 3 files recently
+    param(
+        [int]
+        $cnt
+    )
+
+    $willBeRomoveFile = Get-ChildItem | Sort-Object LastAccessTime -Descending | Select-Object -First $cnt
+    $willBeRomoveFile 
+    Write-Host " "
+    Write-Host " "
+    Write-Host "Do you want to delete this $cnt files ? "
+    Pause
+    Write-Host " "
+    Write-Host " "
+    $willBeRomoveFilePath = $willBeRomoveFile.fullname
+    $willBeRomoveFile | Remove-Item -WhatIf -Verbose
+    $willBeRomoveFilePath | ForEach-Object {recycleBin $_}
+    Write-Host " "
+    Write-Host " "
+    Get-ChildItem | Sort-Object LastAccessTime -Descending | Select-Object -First 3 
+}
