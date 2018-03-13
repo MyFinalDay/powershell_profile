@@ -253,7 +253,7 @@ function logSizeHuman ($i) {
             $res = ($i / 1Gb).ToString('f2') + " GB"
         }
         elseif ($i -gt 0.9Mb) {
-            $res = ($i / 1Mb).ToString('f1') + " MB"
+            $res = ($i / 1Mb).ToString('f0') + " MB"
         }
         elseif ($i -gt 1Kb) {
             $res = ($i / 1Kb).ToString('f1') + " KB"
@@ -273,7 +273,8 @@ function getPsSum ($process) {
 function getWsAll {
     # Get process WorkingSet eg. getWsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
     param(
-        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64", "powershell_ise")]
+        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
+            "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64", "powershell_ise", "vim")]
         [string]
         $process 
     )
@@ -297,6 +298,15 @@ function getLenAll ($directory) {
     logSizeHuman($directoryLength)
 }
 
+function lastPS {
+    # Get process last start-up ( has MainWindowTitle) eg. lastPS -> return 
+    $ErrorActionPreference = "SilentlyContinue"
+    Get-Process | Where-Object {$_.MainWindowTitle.ToString().Length -ne 0} | Sort-Object StartTime -Descending |
+        Format-Table Name, Id, @{Label = "  WS (MB)  "; Expression = {logSizeHuman $_.WS}; alignment = "center";
+    }, @{Name = "  StartTime  "; Expression = {($_.StartTime).ToString().split(' ')[1]}; alignment = "center";
+    }, @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; }, MainWindowTitle
+    $ErrorActionPreference = "Continue"
+}
 function killLastPS($i) {
     # Stop-Process eg. killLastPS powershell -> kill the last start-up powershell 
     $ErrorActionPreference = "SilentlyContinue"
@@ -307,7 +317,8 @@ function killLastPS($i) {
 function killLastPS_quick {
     # Stop-Process(only some special process use killLastPS for normal) eg. killPS powershell -> kill the last start-up powershell 
     param(
-        [ValidateSet("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs")]
+        [ValidateSet("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
+            "wechatdevtools", "mongobooster", "emacs")]
         [string]
         $process 
     )
@@ -320,7 +331,7 @@ function lastPS_notContainMs () {
     $ErrorActionPreference = "SilentlyContinue"
     Get-Process | Sort-Object StartTime -Descending | Select-Object -First 60 |
         Where-Object {$_.Company -ne "Microsoft Corporation" } | Get-Unique | 
-        Format-Table Name, Id, @{Label = "  WS (MB)  "; Expression = {[System.Math]::Truncate($_.WS / 1Mb)}; alignment = "center";
+        Format-Table Name, Id, @{Label = "  WS (MB)  "; Expression = {  }; alignment = "center";
     }, @{Name = "  StartTime  "; Expression = {($_.StartTime).ToString().split(' ')[1]}; alignment = "center";
     }, @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; }, MainWindowTitle
     $ErrorActionPreference = "Continue"
@@ -336,15 +347,6 @@ function lastPS_containMicrosoft () {
 
 
     $resultArr
-    $ErrorActionPreference = "Continue"
-}
-function lastPS {
-    # Get process last start-up ( has MainWindowTitle) eg. lastPS -> return 
-    $ErrorActionPreference = "SilentlyContinue"
-    Get-Process | Where-Object {$_.MainWindowTitle.ToString().Length -ne 0} | Sort-Object StartTime -Descending |
-        Format-Table Name, Id, @{Label = "  WS (MB)  "; Expression = {[System.Math]::Truncate($_.WS / 1Mb)}; alignment = "center";
-    }, @{Name = "  StartTime  "; Expression = {($_.StartTime).ToString().split(' ')[1]}; alignment = "center";
-    }, @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; }, MainWindowTitle
     $ErrorActionPreference = "Continue"
 }
 function convertToBinary ($i) {
@@ -417,8 +419,8 @@ function typeFile () {
         $ele = $_
         if ($ele.Extension -ne "") {
             switch ($ele.Extension.ToLower()) {
-                ".ps1" {"脚本 " + $ele.Name}
-                ".txt" {"文本 " + $ele.Name}
+                ".ps1" {"èæ¬ " + $ele.Name}
+                ".txt" {"ææ¬ " + $ele.Name}
                 ".js" {"js " + $ele.Name}
             }
         }
@@ -782,7 +784,7 @@ function addSimpleNote {
 }
 
 function addEnglishWords {
-    # eg. addEnglishWords 'staff','工作人员'
+    # eg. addEnglishWords 'staff','å·¥ä½äººå'
     param(
         [ValidateCount(0, 2)]
         $noteArr
@@ -793,9 +795,8 @@ function addEnglishWords {
 
 function bd {
     # eg. bd powershellAPI -> baidu.com search powershellAPI
-    param(
-        $keyWord
-    )
+    $keyWord = ($args -join " ")
+
     if ($keyWord -ne $null) {
         Start-Process https://www.baidu.com/s?wd=$keyWord
     }
@@ -859,7 +860,8 @@ function bookmarksOfChrome {
     $bookmarksFirstLevelDirectory = $bookmarks_longArr | Select-Object Name
 
     $bookmarks_titleAndUrlArr1 = $bookmarks_longArr | ForEach-Object {$_.children} | Where-Object {$_.children -eq $null} | Select-Object Name, url 
-    $bookmarks_titleAndUrlArr2 = $bookmarks_longArr | ForEach-Object {$_.children} | Where-Object {$_.children -ne $null} | ForEach-Object {$_.children} | Where-Object {$_.children -eq $null} | Select-Object Name, url 
+    $bookmarks_titleAndUrlArr2 = $bookmarks_longArr | ForEach-Object {$_.children} |
+        Where-Object {$_.children -ne $null} | ForEach-Object {$_.children} | Where-Object {$_.children -eq $null} | Select-Object Name, url 
 
     $bookmarks_titleAndUrlArr = $bookmarks_titleAndUrlArr1 + $bookmarks_titleAndUrlArr2
 
@@ -951,19 +953,79 @@ function riRecent {
         [int]
         $cnt
     )
+   
+    begin {
+        $willBeRomoveFile = Get-ChildItem | Sort-Object LastAccessTime -Descending | Select-Object -First $cnt
+        $willBeRomoveFile 
+        $currentFileCnt = (Get-ChildItem | Measure-Object).Count
+    }
 
-    $willBeRomoveFile = Get-ChildItem | Sort-Object LastAccessTime -Descending | Select-Object -First $cnt
-    $willBeRomoveFile 
-    Write-Host " "
-    Write-Host " "
-    Write-Host "Do you want to delete this $cnt files ? "
-    Pause
-    Write-Host " "
-    Write-Host " "
-    $willBeRomoveFilePath = $willBeRomoveFile.fullname
-    $willBeRomoveFile | Remove-Item -WhatIf -Verbose
-    $willBeRomoveFilePath | ForEach-Object {recycleBin $_}
-    Write-Host " "
-    Write-Host " "
-    Get-ChildItem | Sort-Object LastAccessTime -Descending | Select-Object -First 3 
+    process {
+        if ($willBeRomoveFile -eq $null) {
+            Write-Host " None!"
+            return
+        }
+        elseif ($currentFileCnt -lt $cnt) {
+            Write-Host " Fail... File count only $currentFileCnt"
+            return
+        }
+        Write-Host " "
+        Write-Host " "
+        Write-Host "Do you want to delete this $cnt files ? "
+        Pause
+        Write-Host " "
+        Write-Host " "
+        $willBeRomoveFilePath = $willBeRomoveFile.fullname
+        $willBeRomoveFile | Remove-Item -WhatIf -Verbose
+        Start-Sleep -Seconds 1
+        $willBeRomoveFilePath | ForEach-Object {recycleBin $_}
+    }
+   
+    end {
+        Write-Host " "
+        Write-Host " "
+        Get-ChildItem | Sort-Object LastAccessTime -Descending | Select-Object -First 3 
+    }
+    
+}
+function reCallHistory {
+    param(
+        [int]
+        $cnt
+    ) 
+
+    $historyCnt = (Get-History | Measure-Object).Count
+    if ($historyCnt -lt $cnt) {
+        Write-Host " None!"
+        Write-Host " History count only $historyCnt !"
+        return
+    }
+    Get-History | Select-Object -Last $cnt | ForEach-Object {Invoke-History $_}
+}
+function script:Append-Path( [string]$path ) {
+    if (-not [string]::isNullOrEmpty($path)) {
+        if ( (Test-Path) -and (-not $env:PATH.contains($Path)) ) {
+            $env:PATH += ";" + $path
+        }
+    }
+}
+function local:Get-ShortenedPath {
+    param(
+        [string]
+        $path
+    )
+    $loc = $path.Replace($HOME, '~')
+    # remove prefix for UNC paths
+    $loc = $loc -replace '^[^:]+::', ''
+    # make path shorter like tabs in Vim,
+    # handle paths starting with \\ and . correctly
+    return ($loc -replace '\\(\.?)([^\\])[^\\]*(?=\\)', '\$1$2')
+}
+function IsAdminUser {
+    if ( [Environment]::OSVersion.Platform -eq 'Win32NT' ) {
+        $id = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $p = New-Object Security.Principal.WindowsPrincipal($id)
+        return $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    }
+    return $false
 }
