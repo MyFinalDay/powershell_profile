@@ -1,9 +1,199 @@
-. E:\DataIn\PowershellScriptData\globalVariable.ps1
-. E:\DataIn\PowershellScriptData\lang.ps1
-. E:\DataIn\PowershellScriptData\utils\search.ps1
-. E:\DataIn\PowershellScriptData\utils\baiduTranslate.ps1
-. E:\DataIn\PowershellScriptData\utils\quickSend163Email.ps1
+# global variable
+$Global:myStr1 = @"
+ |^&_-+=$,;\)@~%`][<. ;:}{*!T>/o01OIl'
+"@
+$Global:usualPsArr = @("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom", "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "powershell_ise")
+$Global:sysToolsArr = @('winver', 'mspaint', 'magnify', 'charmap', 'msinfo32', 'resmon')
+$Global:myHash1 = @{level = 1; scope = "root"; isGlobal = $true; lang = @('powershell', 'C#')}
+# $Global:myPsFilePath = 'E:\DataIn\PowershellScriptData\psLib.ps1'
+# $Global:myAliasFilePath = 'E:\DataIn\SettingPowershell\alias.csv'
+
+$Global:myPslibFilePath = @{
+    psLibFilePath = 'E:\DataIn\PowershellScriptData\psLib.ps1';
+    aliasFilePath = 'E:\DataIn\SettingPowershell\alias.csv';
+}
+$Global:myWorkPathHash = @{
+    appJs               = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\';
+    weChatTmpFile       = 'C:\Users\mydell\Documents\WeChat Files\wxid_fodh1nkdqos422\Files';
+    tutorPlatform       = 'E:\DataIn\WorkFor\tutorPlatform\client\admin\src\components\backend';
+    yjxy_wxapp          = 'E:\DataIn\WorkFor\yjxy-wxapp\admin\src\components';
+    treatmentCheck      = 'E:\DataIn\WorkFor\treatmentCheck\client\src\components';
+    sp_BusinessCard     = 'E:\DataIn\WorkFor\sp-BusinessCard\app\model';
+    officialWebsite2018 = 'E:\DataIn\WorkFor\officialWebsite2018\client';
+}
+
+$Global:processPathHash = @{
+    gvim              = 'E:\UserSoft\amixVim\vim80\gvim.exe';
+    gitBash           = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk';
+    ideaLicenseServer = 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk' ;
+    webstorm          = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk';
+    chrome            = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe';
+    firefox           = 'E:\UserSoft\Firefox_64\firefox.exe';
+    IDEA              = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\IntelliJ IDEA Ultimate.lnk';
+    sublime_text      = 'E:\UserSoft\Sublime Text 3x64\sublime_text.exe';
+    Postman           = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Postman\Postman.lnk';
+}
+$Global:myUsualFilePath = @{
+    english = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\utils\studyEnglish\';
+}
+$Global:AppInfoMap = Get-WmiObject -Class Win32_OperatingSystem
 # Function
+function swap ($a, $b) {
+    # swap eg. swap 8 11 -> @(11, 8)
+    $b = $b - $a;
+    $a = $a + $b; # $a + $b - $a
+    $b = $a - $b; # $a + $b - $a - $b + $a
+    return @($a, $b)
+}
+function factorial ([int]$n = $(throw "param is not a integer!")) {
+    # factorial 5 -> 120
+    $total = 1
+
+    for ($i = 1; $i -le $n; $i++) {
+        $total *= $i
+    }
+
+    return $total
+}
+
+function logArr ([array]$array) {
+    for ($i = 0; $i -lt $array.Count; $i++) {
+        Write-Host $array[$i]
+        if ($i % 3 -eq 0) {
+            Write-Host ""
+        }
+    }
+}
+# Remove other Spcce ; keep only one Space
+function RemoveSpace ([string]$str) {
+    # RemoveSapce $myArr1
+    $array = $str.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
+    return [string]::Join(" ", $array)
+}
+
+function bubbleSort ([int[]]$inputArray) {
+    $arr = $inputArray.Clone();
+    
+    for ($i = 0; $i -lt $arr.count; $i++) {
+        for ($j = 0; $j -lt $arr.count - 1 - $i; $j++) {
+            if ($arr[$j] -gt $arr[$j + 1]) {
+                $arr[$j], $arr[$j + 1] = $arr[$j + 1], $arr[$j]
+            }
+        }
+    }
+
+    return $arr -join ", "
+}
+
+# function quickSort ([int[]]$inputArray) {
+#     if ($inputArray.Count -le 1) {
+#         return $inputArray
+#     }
+
+#     $pivotIndex = [System.Math]::Floor($inputArray.Count / 2)
+#     $pivot = $inputArray[$pivotIndex]
+
+#     $front = $pivotIndex - 1
+#     $after = $pivotIndex + 1
+#     $last = $inputArray.Count - 1
+#     $inputArray = $inputArray[0..$front] + $inputArray[$after..$last]
+
+#     $left = @()
+#     $right = @()
+
+#     for ($i = 0; $i -lt $inputArray.Count; $i++) {
+#         if ($inputArray[$i] -lt $pivot) {
+#             $left += $inputArray[$i]
+#         }
+#         else {
+#             $right += $inputArray[$i]
+#         }
+#     }
+
+#     $leftResult = quickSort($left)
+#     $leftResult += $pivot
+#     $rightResult = quickSort($right)
+
+#     return $leftResult += $rightResult
+# }
+
+function bdTranslate {
+    # tranlate chinese <-> english 
+    param(
+        $word
+    )
+    
+    $timeStamp = [Long]([Double]::Parse((Get-Date -UFormat %s)) * 1000)
+    $appid = "2015063000000001"
+    $key = "12345678"
+
+    $tohash = $appid + $word + $timeStamp + $key
+    $md5 = new-object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider
+    $utf8 = new-object -TypeName System.Text.UTF8Encoding
+    $sign = [System.BitConverter]::ToString($md5.ComputeHash($utf8.GetBytes($tohash))).Replace("-", "").ToLower()
+
+
+    $params = @{
+        q     = $word;
+        appid = $appid;
+        salt  = $timeStamp;
+        sign  = $sign;
+    }
+    $lngCheck = [System.Text.RegularExpressions.Regex]::Match($word, "[\u4e00-\u9fa5]").Success
+    if ($lngCheck) {
+        $params.Add("from", "zh")
+        $params.Add("to", "en")
+    }
+    else {
+        $params.Add("from", "en")
+        $params.Add("to", "zh")
+    }
+
+    $querystring = ""
+    $params.GetEnumerator() | ForEach-Object {$querystring += $_.Name + "=" + $_.Value + "&"}
+    $url = "http://api.fanyi.baidu.com/api/trans/vip/translate?" + $querystring
+    $rsp = Invoke-WebRequest $url | ConvertFrom-Json
+
+    $rsp.trans_result[0].dst
+}
+function SimpleTranslate ($word) {
+    Write-Host " "
+    $res = bdTranslate $word
+    if ([int[]][char[]]$word -ge 255) {
+        $res | clip
+    }
+    else {
+        $word | clip  
+    }
+    Write-Host "`t $res"
+    Write-Host " "
+    bdTranslate $res
+    Write-Host " "
+}
+function bdTranslateAntNote {
+    # translate, clip, note
+    param(
+        $word
+    )
+    Write-Host " "
+    $res = bdTranslate $word
+    if ([int[]][char[]]$word -ge 255) {
+        $res | clip
+        if ((Get-ChildItem E:\DataIn\MyNote\tmpEnglish.js | Select-String $res) -eq $null) {
+            addEnglishWords $res, $word
+        }
+    }
+    else {
+        $word | clip  
+        if ((Get-ChildItem E:\DataIn\MyNote\tmpEnglish.js | Select-String $word) -eq $null) {
+            addEnglishWords $word, $res
+        }
+    }
+    $res
+    Write-Host " "
+    bdTranslate $res
+    Write-Host " "
+}
 
 function helpAndExample () {
     help $args[0] -Examples
@@ -13,6 +203,49 @@ function getHistoryMatchChinese() {
     Get-History | Where-Object {[int[]][char[]]$_.CommandLine.ToString() -ge 255}
 }
 
+function searchDuplicateFile() {
+    begin {
+        Write-Host "`n Start...`n" -ForegroundColor Yellow
+        $fileTable = @{}
+        $count = 0
+    }
+
+    process {
+        if ($fileTable.ContainsKey($_.Name)) {
+            Write-Host  "$($_.fullname) has already existed!`n  Location: $($fileTable[$_.Name])`n"
+            $count++
+        }
+        else {
+            $fileTable.Add($_.Name, $_.fullname)
+        }
+    }
+
+    end {
+        Write-Host "`n Total: ${count}"
+        Write-Host "`n Search finish!`n" -ForegroundColor Green
+    }
+}
+
+function enumeratorProperty($obj) {
+    $obj | Select-Object ($obj | Get-Member -MemberType Property | Select-Object Name).Name
+}
+
+function searchVariableAssemblies ($serachText) {
+    [System.AppDomain]::CurrentDomain.GetAssemblies() 
+}
+function hashTableConvertToObject {
+    begin {
+        $obj = New-Object System.Object
+    }
+
+    process {
+        $_.GetEnumerator() | ForEach-Object {Add-Member -InputObject $obj -MemberType NoteProperty -Name $_.Name -Value $_.Value}
+    }
+
+    end {
+        $obj
+    }
+}
 function logSizeHuman ($i) {
     # beautify  
     if ($i -ne $null) {
@@ -165,6 +398,16 @@ function ccl () {
     # Write-Host  "File Count:".PadLeft(25) $fileCount "`tlastAccessFile:" $lastAccessTimeFile
 }
 
+function getRandom {
+    param(
+        [int]$start = 0, [int]$end = 1000, [int]$count = 1
+    )
+    # getRandom 80 100 3 -> range(80, 100) 
+    $rand = New-Object System.Random
+    for ($i = 1; $i -le $count; $i++) {
+        $rand.Next($start, $end)
+    }
+}
 
 # [System.Enum]::GetNames([Microsoft.PowerShell.ExecutionPolicy])
 
@@ -245,10 +488,32 @@ function startPostman {
     Start-Process $Global:processPathHash.Postman
 }
 # program ->
+function ss ($i, $contextCnt = 0, $isCaseSensitive = $false) {
+    # find string eg. ss isNumeric -> find string 'isNumeric' or ss isNumeric 3 -> find string 'isNumeric' and 3 lines context
+    # Get-ChildItem .\*.js -Recurse | Select-String $i -Context $contextCnt
+    if ($isCaseSensitive) {
+        Get-ChildItem . -Include *.js -Recurse | Select-String $i -CaseSensitive -Context $contextCnt
+    }
+    else {
+        Get-ChildItem . -Include *.js -Recurse | Select-String $i -Context $contextCnt
+    }
+}
+
 function getLenAll_kb ($directory) {
     # Get directory size eg. getLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
     ((Get-ChildItem $directory -Recurse | Measure-Object -Property Length -Sum).Sum / 1Kb).ToString("f2") + " KB"
 }
+function findBigFile ($i) {
+    # eg. findBigFile ./*.js -> find .js File and sort them 
+    Get-ChildItem $i -Recurse | Sort-Object Length -Descending | Select-Object -First 20 |
+        Format-Table @{Label = " Name "; Expression = {" " * 5 + $_.Name.ToString() + " " * 1}; alignment = "left";
+    }, @{Label = "  Length(Kb)  "; Expression = {$_.Length / 1Kb -as [int]}; alignment = "center";
+    } , @{Label = "Directory"; Expression = {$_.directory.ToString().substring((Get-Location).Path.Length)}}
+    $totalLength = (getLenAll .)
+    Write-Host "Total recurse:" $totalLength
+    Write-Host ""
+}
+
 function getSortedPS {
     # show process totalRuningTime and startTime
     $result = (Get-Process | Sort-Object WorkingSet -Descending |
@@ -464,6 +729,10 @@ function recycleBin ($relativePath) {
     $item.InvokeVerb('delete')
 }
 
+function identity ($i) {
+    # return itself
+    $i 
+}
 function clearFullScreen {
     # Clear-Host
     $RawUI = $Host.UI.RawUI
@@ -488,6 +757,14 @@ function changeScreen {
         @{Top = -1; Bottom = -1; Right = -1; Left = -1},
         @{Character = ' '; ForegroundColor = $consoleColorArr | Get-Random ; BackgroundColor = $consoleColorArr | Get-Random})
 }
+function sample ([array]$arr, [int]$cnt) {
+    if ($cnt) {
+        $arr | Get-Random -Count $cnt
+    }
+    else {
+        $arr | Get-Random -Count $arr.Count 
+    }
+}
 function coverScreen {
     # cover screen with random string
     $start = getRandom 120 200
@@ -498,7 +775,59 @@ function coverScreen {
     (Get-Date).ToString()
     $randomArr | ForEach-Object {$printStr * $_}
 }
+function addSimpleNote {
+    param(
+        [ValidateCount(0, 2)]
+        $noteArr
+    )
+    Add-Content -Path E:\DataIn\MyNote\tmpNote.js -Value ('"' + $noteArr[0] + '"' + ':' + '"' + $noteArr[1] + '",') -Encoding UTF8
+}
 
+function addEnglishWords {
+    # eg. addEnglishWords 'staff','å·¥ä½äººå'
+    param(
+        [ValidateCount(0, 2)]
+        $noteArr
+    )
+    Add-Content -Path E:\DataIn\MyNote\tmpEnglish.js -Value ('"' + $noteArr[0] + '"' + ': ' + '"' + $noteArr[1] + '",') -Encoding UTF8
+    Get-Content -Path E:\DataIn\MyNote\tmpEnglish.js | more
+}
+
+function bd {
+    # eg. bd powershellAPI -> baidu.com search powershellAPI
+    $keyWord = ($args -join " ")
+
+    if ($keyWord -ne $null) {
+        Start-Process https://www.baidu.com/s?wd=$keyWord
+    }
+    else {
+        Start-Process https://www.baidu.com/
+    }
+}
+function bk {
+    # eg. bk powershell -> baidubaike search powershell
+    param(
+        $keyWord
+    )
+    if ($keyWord -ne $null) {
+        start-process https://baike.baidu.com/item/$keyWord
+    }
+    else {
+        Start-Process https://baike.baidu.com/
+    }
+}
+function g2 {
+    # eg. g2 powershellAPI -> google.com search powershellAPI
+    param(
+        $keyWord
+    )
+    if ($keyWord -ne $null) {
+        Start-Process https://www.google.com/search?q=$keyWord
+    }
+    else {
+        Start-Process https://www.google.com/
+    }
+}
 function testBound {
     param(
         $firstA,
@@ -538,6 +867,18 @@ function bookmarksOfChrome {
 
 
     @($bookmarks_titleArr, $bookmarks_titleAndUrlArr, $bookmarks_longArr)
+}
+function searchBookmarksOfChrome {
+    param(
+        [string]
+        $keyWord
+    ) 
+
+    $bookmarks = bookmarksOfChrome | Select-Object -Index 1
+    $result = $bookmarks | Where-Object {$_.Name -like "*$keyWord*"}
+
+    ($result | Select-Object -First 1 | Select-Object url).url | clip.exe
+    $result 
 }
 function deepMap {
     # Error!
@@ -687,18 +1028,4 @@ function IsAdminUser {
         return $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
     }
     return $false
-}
-
-# function ctc([double]$num) {  
-#     $s = $num.ToString("#L#E#D#C#K#E#D#C#J#E#D#C#I#E#D#C#H#E#D#C#G#E#D#C#F#E#D#C#.0B0A")  
-#     $d = [Regex]::Replace($s, '((?<=-|^)[^1-9]*)|((?''z''0)[0A-E]*((?=[1-9])|(?''-z''(?=[F-L\.]|$))))|((?''b''[F-L])(?''z''0)[0A-L]*((?=[1-9])|(?''-z''(?=[\.]|$))))', '${b}${z}')  
-#     [Regex]::Replace($d, ".", {param($str)"负元空零壹贰叁肆伍陆柒捌玖空空空空空空空分角拾佰仟萬億兆京垓秭穰"[[int][char]$str.Value - [int][char]'-'].ToString()})  
-# } 
-function rmExculeConfig {
-    # move dist/ to reclyeBin exclude *config*
-    Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying'
-    # Remove-Item .\dist\ -Recurse -Verbose -Exclude *config*
-    $willBeRomoveFile = Get-ChildItem .\dist\ -Recurse -Exclude *config*
-    $willBeRomoveFilePath = $willBeRomoveFile.fullname
-    $willBeRomoveFilePath | ForEach-Object {recycleBin $_}
 }
