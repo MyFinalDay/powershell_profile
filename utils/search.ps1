@@ -2,7 +2,7 @@ function bd {
     # eg. bd powershellAPI -> baidu.com search powershellAPI
     $keyWord = ($args -join " ")
 
-    if ($keyWord -ne $null) {
+    if ($keyWord -ne '') {
         Start-Process https://www.baidu.com/s?wd=$keyWord
     }
     else {
@@ -12,7 +12,7 @@ function bd {
 function bk {
     # eg. bk powershell -> baidubaike search powershell
     $keyWord = ($args -join " ")
-    if ($keyWord -ne $null) {
+    if ($keyWord -ne '') {
         start-process https://baike.baidu.com/item/$keyWord
     }
     else {
@@ -22,7 +22,7 @@ function bk {
 function g2 {
     # eg. g2 powershellAPI -> google.com search powershellAPI
     $keyWord = ($args -join " ")
-    if ($keyWord -ne $null) {
+    if ($keyWord -ne '') {
         Start-Process https://www.google.com/search?q=$keyWord
     }
     else {

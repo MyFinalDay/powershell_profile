@@ -1,8 +1,11 @@
 . E:\DataIn\PowershellScriptData\globalVariable.ps1
 . E:\DataIn\PowershellScriptData\lang.ps1
 . E:\DataIn\PowershellScriptData\utils\search.ps1
+# utils
 . E:\DataIn\PowershellScriptData\utils\baiduTranslate.ps1
 . E:\DataIn\PowershellScriptData\utils\quickSend163Email.ps1
+. E:\DataIn\PowershellScriptData\utils\note.ps1
+
 # Function
 
 function helpAndExample () {
@@ -587,21 +590,49 @@ function addFavoritePath {
 # function getFavouritePath {
 #     Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
 # }
-function addBrackets {
+function addDoubleQuotes  {
     param(
         [string]
         $word
     ) 
 
-    "(" + $word + ")" | clip
-    "(" + $word + ")" 
+    if ($word -ne '') {
+        $res = $word
+    }
+    else {
+        $res = Get-History | Select-Object -Last 1
+        $res = $res.CommandLine
+    }
+
+    '"' + $res + '"' | clip
+    '"' + $res + '"' 
 }
-function getType2 {
+function addParentheses {
     param(
         [string]
         $word
     ) 
-    $res = addBrackets $word
+
+    if ($word -ne '') {
+        $res = $word
+    }
+    else {
+        $res = Get-History | Select-Object -Last 1
+        $res = $res.CommandLine
+    }
+
+    "(" + $res + ")" | clip
+    "(" + $res + ")" 
+}
+function getType2 {
+    $word = ($args -join " ")
+    if ($word -ne '') {
+        $res = addParentheses $word
+    }
+    else {
+        $res = Get-History | Select-Object -Last 1
+        $res = addParentheses $res.CommandLine
+    }
     $res = $res + ".GetType()"
     $res | clip
     $res
@@ -696,9 +727,32 @@ function IsAdminUser {
 # } 
 function rmExculeConfig {
     # move dist/ to reclyeBin exclude *config*
-    Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying'
-    # Remove-Item .\dist\ -Recurse -Verbose -Exclude *config*
-    $willBeRomoveFile = Get-ChildItem .\dist\ -Recurse -Exclude *config*
-    $willBeRomoveFilePath = $willBeRomoveFile.fullname
-    $willBeRomoveFilePath | ForEach-Object {recycleBin $_}
+    # Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\dist'
+    Set-Location 'E:\DataIn\VScodeData\newTestXiaoChengXu\testWepy\project2\dist'
+    $ErrorActionPreference = "SilentlyContinue"
+    Remove-Item * -Recurse -Exclude *config*
+    'rm -r `ls | grep -v *config*`' | clip
+    $ErrorActionPreference = "Continue"
+}
+function rmDistByShell {
+    'rm -r `ls | grep -v *config*`' | clip
+}
+
+filter Get-ProcessOwner {
+    $id = $_.ID
+    $info = (Get-WmiObject -Class Win32_Process -Filter "Handle=$id").GetOwner()
+    if ($info.ReturnValue -eq 2) {
+        $owner = '[Access Denied]'
+    }
+    else {
+        $owner = '{0}\{1}' -f $info.Domain, $info.User
+    }
+    $_ | Add-Member -MemberType NoteProperty -Name Owner -Value $owner -PassThru
+}
+
+function  getProcessOwner {
+    param(
+        $process
+    ) 
+    Get-Process $process | Get-ProcessOwner | Select-Object -Property Name, ID, Owner
 }

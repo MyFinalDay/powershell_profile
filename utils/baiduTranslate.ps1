@@ -76,3 +76,9 @@ function bdTranslateAntNote {
     bdTranslate $res
     Write-Host " "
 }
+function bdTranslateAndClip ($word) {
+    $res = bdTranslate $word
+    $res = @($res, $word)
+    $res
+    $res | clip
+}
