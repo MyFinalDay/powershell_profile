@@ -66,14 +66,21 @@ function searchDuplicateFile() {
 function searchVariableAssemblies ($serachText) {
     [System.AppDomain]::CurrentDomain.GetAssemblies() 
 }
-function ss ($i, $contextCnt = 0, $isCaseSensitive = $false) {
+function ss  {
     # find string eg. ss isNumeric -> find string 'isNumeric' or ss isNumeric 3 -> find string 'isNumeric' and 3 lines context
+    # eg. ss height 1 $false wxml -> find string 'height' from wxml
     # Get-ChildItem .\*.js -Recurse | Select-String $i -Context $contextCnt
+    param(
+        $searchPattern,
+        $contextCnt = 0,
+        $isCaseSensitive = $false,
+        $fileExtension = "js"
+    )
     if ($isCaseSensitive) {
-        Get-ChildItem . -Include *.js -Recurse | Select-String $i -CaseSensitive -Context $contextCnt
+        Get-ChildItem . -Include "*.$fileExtension" -Recurse | Select-String $searchPattern -CaseSensitive -Context $contextCnt
     }
     else {
-        Get-ChildItem . -Include *.js -Recurse | Select-String $i -Context $contextCnt
+        Get-ChildItem . -Include "*.$fileExtension"-Recurse | Select-String $searchPattern -Context $contextCnt
     }
 }
 

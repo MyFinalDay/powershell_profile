@@ -1,14 +1,15 @@
 . E:\DataIn\PowershellScriptData\globalVariable.ps1
 . E:\DataIn\PowershellScriptData\lang.ps1
-. E:\DataIn\PowershellScriptData\utils\search.ps1
+. E:\DataIn\PowershellScriptData\commonPsLib.ps1
 # utils
+. E:\DataIn\PowershellScriptData\utils\search.ps1
 . E:\DataIn\PowershellScriptData\utils\baiduTranslate.ps1
 . E:\DataIn\PowershellScriptData\utils\quickSend163Email.ps1
 . E:\DataIn\PowershellScriptData\utils\note.ps1
 
 # Function
 
-function helpAndExample () {
+function he {
     help $args[0] -Examples
 }
 
@@ -16,30 +17,6 @@ function getHistoryMatchChinese() {
     Get-History | Where-Object {[int[]][char[]]$_.CommandLine.ToString() -ge 255}
 }
 
-function logSizeHuman ($i) {
-    # beautify  
-    if ($i -ne $null) {
-        if ($i -gt 0.9Gb) {
-            $res = ($i / 1Gb).ToString('f2') + " GB"
-        }
-        elseif ($i -gt 0.9Mb) {
-            $res = ($i / 1Mb).ToString('f0') + " MB"
-        }
-        elseif ($i -gt 1Kb) {
-            $res = ($i / 1Kb).ToString('f1') + " KB"
-        }
-        else {
-            $res = ($i).ToString('f0') + " Bytes"
-        }
-
-        $res
-    }
-}
-function getPsSum ($process) {
-    $processWs = (Get-Process $process | Measure-Object -Property WS -Sum).Sum
-    $processWs = (logSizeHuman($processWs))
-    $processWs
-}
 function getWsAll {
     # Get process WorkingSet eg. getWsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
     param(
@@ -61,11 +38,6 @@ function getWsAllNoraml {
     $processCnt = ( Get-Process $process | Measure-Object ).Count
     $processWs
     $processCnt
-}
-function getLenAll ($directory) {
-    # Get directory size eg. getLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
-    $directoryLength = (Get-ChildItem $directory -Recurse | Measure-Object -Property Length -Sum).Sum
-    logSizeHuman($directoryLength)
 }
 
 function lastPS {
@@ -118,9 +90,6 @@ function lastPS_containMicrosoft () {
 
     $resultArr
     $ErrorActionPreference = "Continue"
-}
-function convertToBinary ($i) {
-    [System.Convert]::ToString($i, 2) 
 }
 
 function cl() {
@@ -198,6 +167,9 @@ function startGvim () {
 function startGitBash () {
     # git-bash.exe
     Start-Process 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk' -Verb runAs
+    $path = (Get-Location).Path
+    $path = 'cd /' + $path.Replace('\', '/').replace(':', '') 
+    $path | clip.exe
 }
 function startEmacs {
     # emacs.exe 
@@ -248,10 +220,6 @@ function startPostman {
     Start-Process $Global:processPathHash.Postman
 }
 # program ->
-function getLenAll_kb ($directory) {
-    # Get directory size eg. getLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
-    ((Get-ChildItem $directory -Recurse | Measure-Object -Property Length -Sum).Sum / 1Kb).ToString("f2") + " KB"
-}
 function getSortedPS {
     # show process totalRuningTime and startTime
     $result = (Get-Process | Sort-Object WorkingSet -Descending |
@@ -300,7 +268,7 @@ function recentlyChangeFile ([int]$weekCnt) {
 
 function logPersonalAlias () {
     # only log can not work
-    Set-Alias rcf recentlyChangeFile
+        Set-Alias rcf recentlyChangeFile;  
 }
 
 function eld {
@@ -412,37 +380,6 @@ function computerInfo {
     $computerInfoObj
 }
 
-function Convert-Size {            
-    # eg. Convert-Size -From GB -To KB 1024 -> 1073741824
-    [cmdletbinding()]            
-    param(            
-        [validateset("Bytes", "KB", "MB", "GB", "TB")]            
-        [string]$From,            
-        [validateset("Bytes", "KB", "MB", "GB", "TB")]            
-        [string]$To,            
-        [Parameter(Mandatory = $true)]            
-        [double]$Value,            
-        [int]$Precision = 4            
-    )            
-    switch ($From) {            
-        "Bytes" {$value = $Value }            
-        "KB" {$value = $Value * 1024 }            
-        "MB" {$value = $Value * 1024 * 1024}            
-        "GB" {$value = $Value * 1024 * 1024 * 1024}            
-        "TB" {$value = $Value * 1024 * 1024 * 1024 * 1024}            
-    }            
-            
-    switch ($To) {            
-        "Bytes" {return $value}            
-        "KB" {$Value = $Value / 1KB}            
-        "MB" {$Value = $Value / 1MB}            
-        "GB" {$Value = $Value / 1GB}            
-        "TB" {$Value = $Value / 1TB}            
-            
-    }            
-            
-    return [Math]::Round($value, $Precision, [MidPointRounding]::AwayFromZero)            
-}
 function getParentsPs ($i) {
     # eg. getParentsPs gvim -> found gvim.exe parents powershell
     $ErrorActionPreference = "SilentlyContinue"
@@ -460,12 +397,6 @@ function getParentsPs ($i) {
     $ErrorActionPreference = "Continue"
 }
 
-function recycleBin ($relativePath) {
-    # move to recycleBin eg. recyleBin ./file1.js -> delete file1.js move to recyclyeBin
-    $shell = New-Object -ComObject 'Shell.Application' 
-    $item = $shell.Namespace(0).parseName((Resolve-Path $relativePath).Path)
-    $item.InvokeVerb('delete')
-}
 
 function clearFullScreen {
     # Clear-Host
@@ -509,16 +440,6 @@ function testBound {
     ) 
 
     $PSBoundParameters
-}
-function saveCurrentPath () {
-    # eg. saveCurrentPath 
-    $Global:lastAccessPath = (Get-Location).Path
-    $Global:lastAccessPath | clip
-    $Global:lastAccessPath
-}
-function isVariableNull ($i) {
-    # eg. isVariableNull $testVariable -> True
-    $i -eq $null 
 }
 function someConstantVariable {
     $variable1 = [System.Globalization.DateTimeFormatInfo]::CurrentInfo 
@@ -590,40 +511,6 @@ function addFavoritePath {
 # function getFavouritePath {
 #     Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
 # }
-function addDoubleQuotes  {
-    param(
-        [string]
-        $word
-    ) 
-
-    if ($word -ne '') {
-        $res = $word
-    }
-    else {
-        $res = Get-History | Select-Object -Last 1
-        $res = $res.CommandLine
-    }
-
-    '"' + $res + '"' | clip
-    '"' + $res + '"' 
-}
-function addParentheses {
-    param(
-        [string]
-        $word
-    ) 
-
-    if ($word -ne '') {
-        $res = $word
-    }
-    else {
-        $res = Get-History | Select-Object -Last 1
-        $res = $res.CommandLine
-    }
-
-    "(" + $res + ")" | clip
-    "(" + $res + ")" 
-}
 function getType2 {
     $word = ($args -join " ")
     if ($word -ne '') {
@@ -691,6 +578,8 @@ function reCallHistory {
         return
     }
     Get-History | Select-Object -Last $cnt | ForEach-Object {Invoke-History $_}
+    
+    '. $myPslibFilePath.psLibFilePath' | clip
 }
 function script:Append-Path( [string]$path ) {
     if (-not [string]::isNullOrEmpty($path)) {
@@ -755,4 +644,33 @@ function  getProcessOwner {
         $process
     ) 
     Get-Process $process | Get-ProcessOwner | Select-Object -Property Name, ID, Owner
+}
+function sll {
+    param(
+        [string]
+        $location,
+        [string]
+        $openType
+    ) 
+
+    Set-Location $location
+    $cnt = (Get-ChildItem | Measure-Object).Count
+    if ($cnt -gt 53) {
+        Get-ChildItemColor | more
+        $cnt
+    }
+    else {
+        Get-ChildItemColor
+        $cnt
+    }
+
+    saveCurrentPath
+
+    switch ($openType) {
+        'e' { explorer.exe . }
+        'g' { startGvim }
+        'b' { startGitBash }
+        's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3}
+        Default {}
+    }
 }

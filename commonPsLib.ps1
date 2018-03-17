@@ -1,0 +1,109 @@
+function logSizeHuman ($i) {
+    # beautify  
+    if ($i -ne $null) {
+        if ($i -gt 0.9Gb) {
+            $res = ($i / 1Gb).ToString('f2') + " GB"
+        }
+        elseif ($i -gt 0.9Mb) {
+            $res = ($i / 1Mb).ToString('f0') + " MB"
+        }
+        elseif ($i -gt 1Kb) {
+            $res = ($i / 1Kb).ToString('f1') + " KB"
+        }
+        else {
+            $res = ($i).ToString('f0') + " Bytes"
+        }
+
+        $res
+    }
+}
+function getPsSum ($process) {
+    $processWs = (Get-Process $process | Measure-Object -Property WS -Sum).Sum
+    $processWs = (logSizeHuman($processWs))
+    $processWs
+}
+function getLenAll ($directory) {
+    # Get directory size eg. getLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
+    $directoryLength = (Get-ChildItem $directory -Recurse | Measure-Object -Property Length -Sum).Sum
+    logSizeHuman($directoryLength)
+}
+function convertToBinary ($i) {
+    [System.Convert]::ToString($i, 2) 
+}
+function Convert-Size {            
+    # eg. Convert-Size -From GB -To KB 1024 -> 1073741824
+    [cmdletbinding()]            
+    param(            
+        [validateset("Bytes", "KB", "MB", "GB", "TB")]            
+        [string]$From,            
+        [validateset("Bytes", "KB", "MB", "GB", "TB")]            
+        [string]$To,            
+        [Parameter(Mandatory = $true)]            
+        [double]$Value,            
+        [int]$Precision = 4            
+    )            
+    switch ($From) {            
+        "Bytes" {$value = $Value }            
+        "KB" {$value = $Value * 1024 }            
+        "MB" {$value = $Value * 1024 * 1024}            
+        "GB" {$value = $Value * 1024 * 1024 * 1024}            
+        "TB" {$value = $Value * 1024 * 1024 * 1024 * 1024}            
+    }            
+            
+    switch ($To) {            
+        "Bytes" {return $value}            
+        "KB" {$Value = $Value / 1KB}            
+        "MB" {$Value = $Value / 1MB}            
+        "GB" {$Value = $Value / 1GB}            
+        "TB" {$Value = $Value / 1TB}            
+            
+    }            
+            
+    return [Math]::Round($value, $Precision, [MidPointRounding]::AwayFromZero)            
+}
+function recycleBin ($relativePath) {
+    # move to recycleBin eg. recyleBin ./file1.js -> delete file1.js move to recyclyeBin
+    $shell = New-Object -ComObject 'Shell.Application' 
+    $item = $shell.Namespace(0).parseName((Resolve-Path $relativePath).Path)
+    $item.InvokeVerb('delete')
+}
+function saveCurrentPath () {
+    # eg. saveCurrentPath 
+    $Global:lastAccessPath = (Get-Location).Path
+    $Global:lastAccessPath | clip
+    $Global:lastAccessPath
+}
+function addDoubleQuotes {
+    param(
+        [string]
+        $word
+    ) 
+
+    if ($word -ne '') {
+        $res = $word
+    }
+    else {
+        $res = Get-History | Select-Object -Last 1
+        $res = $res.CommandLine
+    }
+
+    '"' + $res + '"' | clip
+    '"' + $res + '"' 
+}
+function addParentheses {
+    param(
+        [string]
+        $word
+    ) 
+
+    if ($word -ne '') {
+        $res = $word
+    }
+    else {
+        $res = Get-History | Select-Object -Last 1
+        $res = $res.CommandLine
+    }
+
+    "(" + $res + ")" | clip
+    "(" + $res + ")" 
+}
