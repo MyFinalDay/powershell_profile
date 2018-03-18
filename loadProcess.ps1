@@ -1,3 +1,9 @@
+# 
+# ******************************************************************************** 
+Set-Content E:\DataIn\SettingPowershell\tmpStartInfo.txt ([datetime]::Now)
+
+Write-Host "`nTimeSpan Last shutdown computer..."
+New-TimeSpan -End ([datetime]::Now) -Start (Get-Content E:\DataIn\SettingPowershell\tmpShudownInfo.txt) -ErrorAction SilentlyContinue | Format-Table 
 # ******************************************************************************** 
 # some variables
 # ******************************************************************************** 
@@ -6,7 +12,7 @@ $oneNote = "start 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsof
 $firfox = "start E:\UserSoft\Firefox_64\firefox.exe"
 
 $wox = "start C:\Users\mydell\AppData\Local\Wox\app-1.3.183\Wox.exe"
-$cmder = "start E:\UserSoft\cmderAnd\Cmder.exe"
+$cmder = "start E:\UserSoft\conEmu2\ConEmu64.exe"
 
 $ideaLicenseServer = "start 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk'"
 $westorm64 = "start 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk'"
@@ -16,6 +22,8 @@ $weChat = "start E:\UserSoft\WeChat\WeChat.exe"
 
 $wecharDevelopTools = "start C:\Users\mydell\Desktop\??web?????.lnk"
 $chrome = "start 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk'"
+
+$code = "start 'E:\UserSoft\Microsoft VS Code\Code.exe'"
 
 $Global:startLoadTime = Get-Date
 $Global:startLoadTimeAllProcess = Get-Process
@@ -30,27 +38,12 @@ Start-Sleep -Seconds 2
 
 Write-Host "Open...".PadLeft(20)
 # Invoke-Expression $oneNote
-Invoke-Expression $firfox
 Invoke-Expression $wox
 
 Invoke-Expression $cmder
-Invoke-Expression $ideaLicenseServer
-
-Invoke-Expression $westorm64
-Invoke-Expression $sourceTree
-
-Invoke-Expression $weChat
-Invoke-Expression $wecharDevelopTools
-
 Invoke-Expression $chrome
+
 # Start-Process powershell -Verb runas
-
-
-Start-Sleep -Seconds 20
-
-Write-Host "`nKill..."
-Stop-Process -Name ThunderPlatform, lantern, ONENOTEM, 'Resilio Sync', jetbrains-toolbox, Xmp, QQLive, QQ* -ErrorAction SilentlyContinue
-
 
 Write-Host "`nSet..."
 # Set-Alias st E:\UserSoft\Sublime Text 3x64\sublime_text.exe
@@ -62,12 +55,10 @@ Write-Host "`nImport Alias,History..."
 Start-Sleep -Seconds 30
 Stop-Process -Name ThunderPlatform, lantern, ONENOTEM, 'Resilio Sync', jetbrains-toolbox, Xmp, QQLive, QQ* -ErrorAction SilentlyContinue
 
-Start-Sleep -Seconds 50
-Stop-Process -Name IntelliJIDEALicenseServer_windows_amd64 -ErrorAction SilentlyContinue
 
 Set-Location $HOME
 
 Write-Host "`nThat all...".PadLeft(20) -ForegroundColor Red
 
-Start-Sleep -Seconds 15
+Start-Sleep -Seconds 20
 Stop-Process -Id $PID

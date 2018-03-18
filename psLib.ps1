@@ -1,5 +1,5 @@
 . E:\DataIn\PowershellScriptData\globalVariable.ps1
-. E:\DataIn\PowershellScriptData\lang.ps1
+. E:\DataIn\PowershellScriptData\zPsLang\lang.ps1
 . E:\DataIn\PowershellScriptData\commonPsLib.ps1
 # utils
 . E:\DataIn\PowershellScriptData\utils\search.ps1
@@ -7,10 +7,16 @@
 . E:\DataIn\PowershellScriptData\utils\quickSend163Email.ps1
 . E:\DataIn\PowershellScriptData\utils\note.ps1
 
+# clip
+'ipal $myPslibFilePath.aliasFilePath -Force' | clip
+
 # Function
 
 function he {
     help $args[0] -Examples
+    if ($args[0] -match "-") {
+        Get-Alias -Definition $args[0]
+    }
 }
 
 function getHistoryMatchChinese() {
@@ -168,7 +174,8 @@ function startGitBash () {
     # git-bash.exe
     Start-Process 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk' -Verb runAs
     $path = (Get-Location).Path
-    $path = 'cd /' + $path.Replace('\', '/').replace(':', '') 
+    $path = changeCRLFToLF $path
+    $path = "cd " + $path
     $path | clip.exe
 }
 function startEmacs {
@@ -268,7 +275,7 @@ function recentlyChangeFile ([int]$weekCnt) {
 
 function logPersonalAlias () {
     # only log can not work
-        Set-Alias rcf recentlyChangeFile;  
+    Set-Alias rcf recentlyChangeFile;  
 }
 
 function eld {
@@ -416,11 +423,18 @@ function enumeratorColor {
 function changeScreen {
     # 
     $RawUI = $Host.UI.RawUI
-    $RawUI.CursorPosition = @{X = 0; Y = 0}
     $consoleColorArr = [System.Enum]::GetNames([System.ConsoleColor])
+    $RawUI.CursorPosition = @{X = 0; Y = 0}
     $RawUI.SetBufferContents(
         @{Top = -1; Bottom = -1; Right = -1; Left = -1},
         @{Character = ' '; ForegroundColor = $consoleColorArr | Get-Random ; BackgroundColor = $consoleColorArr | Get-Random})
+}
+function loopChangeScreen {
+    '$Host.UI.RawUI.ForegroundColor = "Gray"' | clip
+    $RawUI = $Host.UI.RawUI
+    $consoleColorArr = [System.Enum]::GetNames([System.ConsoleColor])
+    $interval = getRandom -start 1 -end 12 -count 1000
+    $interval | ForEach-Object {$RawUI.ForegroundColor = $consoleColorArr | Get-Random ; coverScreen; Start-Sleep -Seconds $_ ; changeScreen}
 }
 function coverScreen {
     # cover screen with random string
@@ -669,8 +683,10 @@ function sll {
     switch ($openType) {
         'e' { explorer.exe . }
         'g' { startGvim }
-        'b' { startGitBash }
-        's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3}
+        'b' { quickStartGitBash }
+
+        's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3 }
+        'ni' { New-Item -ItemType Directory -Name (genRandomStr) }
         Default {}
     }
 }
