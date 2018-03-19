@@ -432,9 +432,9 @@ function changeScreen {
 function loopChangeScreen {
     '$Host.UI.RawUI.ForegroundColor = "Gray"' | clip
     $RawUI = $Host.UI.RawUI
-    $consoleColorArr = [System.Enum]::GetNames([System.ConsoleColor])
+    $consoleColorArr = [System.Enum]::GetNames( [System.ConsoleColor] )
     $interval = getRandom -start 1 -end 12 -count 1000
-    $interval | ForEach-Object {$RawUI.ForegroundColor = $consoleColorArr | Get-Random ; coverScreen; Start-Sleep -Seconds $_ ; changeScreen}
+    $interval | ForEach-Object { $RawUI.ForegroundColor = $consoleColorArr | Get-Random ; coverScreen; Start-Sleep -Seconds $_ ; changeScreen }
 }
 function coverScreen {
     # cover screen with random string
@@ -670,11 +670,11 @@ function sll {
     Set-Location $location
     $cnt = (Get-ChildItem | Measure-Object).Count
     if ($cnt -gt 53) {
-        Get-ChildItemColor | more
+        Get-ChildItemColor | Sort-Object LastAccessTime -Descending | more
         $cnt
     }
     else {
-        Get-ChildItemColor
+        Get-ChildItemColor | Sort-Object LastAccessTime -Descending
         $cnt
     }
 
@@ -683,10 +683,45 @@ function sll {
     switch ($openType) {
         'e' { explorer.exe . }
         'g' { startGvim }
-        'b' { quickStartGitBash }
 
+        'b' { quickStartGitBash }
         's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3 }
-        'ni' { New-Item -ItemType Directory -Name (genRandomStr) }
+
+        'md' { New-Item -ItemType Directory -Name (genRandomStr) }
+        'ni' { New-Item -ItemType File -Name (genRandomStr) }
         Default {}
+    }
+}
+
+function reNameWithPinying {
+    # rename  eg. reNameWithPinyin 文档2 -> w文档2
+    param(
+        [string]
+        $name,
+        [string]
+        $firstAlpha
+    ) 
+
+    $name = (Get-Item $name).Name
+    if ([int][char]$name[0] -le 255) {
+        return
+    }
+    else {
+        $newName = $firstAlpha + $name
+        Rename-Item $name $newName
+    }
+}
+
+function chineseToPinyin {
+    # change Chinese characters to pinyin eg. chineseToPinyin '汉字' -> h
+    param(
+        [string]
+        $word
+    )
+
+    $res = ( node F:\Material\Github_down\javascript\webUtils\test\pinying.js $word )
+    
+    if ($res.Length -gt 1) {
+        $res.toLower().Substring(0, 2)
     }
 }

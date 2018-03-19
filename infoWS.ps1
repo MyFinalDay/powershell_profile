@@ -204,7 +204,7 @@ logWs
 
 getSortedPS 5
 
-New-Object string("*", 70)
+# New-Object string("*", 70)
 Write-Host " "
 computerInfo | Out-Host
 
@@ -232,6 +232,7 @@ historyCount 5
 
 $Global:startInfoTime = (Get-Date)
 # node E:\DataIn\NodejsData\testWebpack\testSmall\src\utils\studyEnglish\studyComputerEnglish.js
+New-Object string(" ", 10)
 Get-Content E:\DataIn\NodejsData\testWebpack\testSmall\src\utils\studyEnglish\words.js -Encoding UTF8 |
     Get-Random -Count 5 -ErrorAction SilentlyContinue | ForEach-Object {"  " + $_}
 # "`n`n"

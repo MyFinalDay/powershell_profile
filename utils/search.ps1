@@ -1,3 +1,19 @@
+function searchNetAbstract {
+    param(
+        [string]
+        $keyWord,
+        [string]
+        $address,
+        [string]
+        $searchFragment
+    ) 
+
+    if ($keyWord -ne '') {
+        $address = $address + $searchFragment + $keyWord
+    }
+
+    Start-Process $address
+}
 function bd {
     # eg. bd powershellAPI -> baidu.com search powershellAPI
     $keyWord = ($args -join " ")
@@ -18,6 +34,11 @@ function bk {
     else {
         Start-Process https://baike.baidu.com/
     }
+
+    # $address = "https://baike.baidu.com/"
+    # $searchFragment = "item/"
+
+    # searchNetAbstract($keyWord, $address, $searchFragment)
 }
 function g2 {
     # eg. g2 powershellAPI -> google.com search powershellAPI
@@ -35,8 +56,9 @@ function searchBookmarksOfChrome {
         $keyWord
     ) 
 
+    $keyWord = $keyWord.ToLower()
     $bookmarks = bookmarksOfChrome | Select-Object -Index 1
-    $result = $bookmarks | Where-Object {$_.Name -like "*$keyWord*"}
+    $result = $bookmarks | Where-Object {$_.Name.ToLower() -like "*$keyWord*"}
 
     ($result | Select-Object -First 1 | Select-Object url).url | clip.exe
     $result 
@@ -66,7 +88,7 @@ function searchDuplicateFile() {
 function searchVariableAssemblies ($serachText) {
     [System.AppDomain]::CurrentDomain.GetAssemblies() 
 }
-function ss  {
+function ss {
     # find string eg. ss isNumeric -> find string 'isNumeric' or ss isNumeric 3 -> find string 'isNumeric' and 3 lines context
     # eg. ss height 1 $false wxml -> find string 'height' from wxml
     # Get-ChildItem .\*.js -Recurse | Select-String $i -Context $contextCnt
@@ -117,5 +139,27 @@ function ss_wpy ($i, $contextCnt = 0, $isCaseSensitive = $false) {
     }
     else {
         Get-ChildItem . -Include *.wpy -Recurse | Select-String $i -Context $contextCnt
+    }
+}
+
+function segmentfault {
+    $keyWord = ($args -join " ")
+
+    if ($keyWord -ne '') {
+        Start-Process https://segmentfault.com/search?q=$keyWord
+    }
+    else {
+        Start-Process https://segmentfault.com/
+    }
+}
+
+function stackoverflow {
+    $keyWord = ($args -join " ")
+
+    if ($keyWord -ne '') {
+        Start-Process https://stackoverflow.com/search?q=$keyWord
+    }
+    else {
+        Start-Process https://stackoverflow.com/
     }
 }
