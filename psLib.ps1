@@ -23,8 +23,8 @@ function getHistoryMatchChinese() {
     Get-History | Where-Object {[int[]][char[]]$_.CommandLine.ToString() -ge 255}
 }
 
-function getWsAll {
-    # Get process WorkingSet eg. getWsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
+function wsAll {
+    # Get process WorkingSet eg. wsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
     param(
         [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
             "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64", "powershell_ise", "vim")]
@@ -34,8 +34,8 @@ function getWsAll {
     $processWs = getPsSum($process)
     $processWs
 }
-function getWsAllNoraml {
-    # Get process WorkingSet eg. getWsAllNoraml firefox -> 632MB 5
+function wsAllNoraml {
+    # Get process WorkingSet eg. wsAllNoraml firefox -> 632MB 5
     param(
         [string]
         $process 
@@ -166,65 +166,29 @@ function typeFile () {
     }
 }
 # <- start program.exe
-function startGvim () {
-    # fullscreen gvim.exe 
-    Start-Process E:\UserSoft\amixVim\vim80\gvim.exe -WindowStyle Maximized
-}
-function startGitBash () {
-    # git-bash.exe
-    Start-Process 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk' -Verb runAs
-    $path = (Get-Location).Path
-    $path = changeCRLFToLF $path
-    $path = "cd " + $path
-    $path | clip.exe
-}
-function startEmacs {
-    # emacs.exe 
-    Start-Process 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Gnu Emacs\Emacs.lnk'
-}
-function startIntellJIDEALisceseServer {
-    $ideaLicenseServer = "start 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk' -WindowStyle Hidden"
-    Invoke-Expression $ideaLicenseServer    
-}
+function pg {
+    # pg gvim
+    param(
+        [ValidateSet("gvim", "firefox", "chrome", "powershell", "qq", "Code", "gitBash",
+            "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64",
+            "IDEA", "powershell_ise", "searchEveryting", "weChat", "baiduDisk", "sublime_text" )]
+        [string]
+        $process 
+    )
 
-function startWebstorm () {
-    # webstorm.exe
-    $ErrorActionPreference = "SilentlyContinue"
-    startIntellJIDEALisceseServer
-    Start-Sleep -Seconds 1
-    Start-Process 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk'
-
-    Start-Sleep -Seconds 80
-    Stop-Process -Name IntelliJIDEALicenseServer_windows_amd64 
-    $ErrorActionPreference = "Continue"
-}
-
-function startChrome () {
-    # chrome.exe
-    Start-Process 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'
-}
-function startFirefox () {
-    # firefox.exe 
-    Start-Process E:\UserSoft\Firefox_64\firefox.exe
-}
-function startIDEA () {
-    # Intellij IDEA.exe
-    $ErrorActionPreference = "SilentlyContinue"
-    startIntellJIDEALisceseServer
-    Start-Process 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\IntelliJ IDEA Ultimate.lnk'
-
-    Start-Sleep -Seconds 80
-    Stop-Process -Name IntelliJIDEALicenseServer_windows_amd64 
-    $ErrorActionPreference = "Continue"
-}
-function startBaiduDisk {
-    Invoke-Expression  "start 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\????\????.lnk'"
-}
-function startSublimeText () {
-    Start-Process 'E:\UserSoft\Sublime Text 3x64\sublime_text.exe' 
-}
-function startPostman {
-    Start-Process $Global:processPathHash.Postman
+    switch ($process) {
+        gvim {  Start-Process $Global:processPathHash[$process] -WindowStyle Maximized }
+        gitBash { 
+            Start-Process $Global:processPathHash[$process] -Verb runAs
+            $path = (Get-Location).Path
+            $path = changeCRLFToLF $path
+            $path = "cd " + $path
+            $path | clip.exe
+        }
+        powershell { Start-Process $Global:processPathHash[$process] -Verb runAs }
+        powershell_ise { Start-Process $Global:processPathHash[$process] -Verb runAs }
+        Default { Start-Process $Global:processPathHash[$process] }
+    }
 }
 # program ->
 function getSortedPS {
@@ -682,7 +646,7 @@ function sll {
 
     switch ($openType) {
         'e' { explorer.exe . }
-        'g' { startGvim }
+        'g' { pg gvim }
 
         'b' { quickStartGitBash }
         's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3 }
