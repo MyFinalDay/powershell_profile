@@ -33,7 +33,7 @@ $Global:processPathHash = @{
     weChat            = 'E:\UserSoft\WeChat\WeChat.exe'
     gitBash           = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk';
     ideaLicenseServer = 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk' ;
-    webstorm          = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk';
+    webstorm64        = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk';
     chrome            = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe';
     qq                = 'C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe';
     wechatdevtools    = 'E:\UserSoft\??web?????\wechatdevtools.exe';
@@ -56,4 +56,5 @@ $Global:AppInfoMap = Get-WmiObject -Class Win32_OperatingSystem
 
 $Global:myMsg = @{
     AppId = 'wx97807883a836a66d';
+    yx    = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx%E5%8E%9F%E5%9E%8B/bb%E6%AD%A5%E6%AD%A5%E4%B8%BA%E7%9B%88_%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AB%AF%E5%8E%9F%E5%9E%8B_0314/start.html#g=1&p=%E9%9A%8F%E6%9C%BA%E7%BB%84%E9%98%9F_%E5%88%9B%E5%BB%BA%E9%98%9F%E4%BC%8D';
 }

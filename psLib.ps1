@@ -10,6 +10,9 @@
 # clip
 'ipal $myPslibFilePath.aliasFilePath -Force' | clip
 
+# setting
+$Host.UI.RawUI.WindowTitle = '*\(*^_^*)/*' + '    ' + (date)
+
 # Function
 
 function he {
@@ -684,8 +687,22 @@ function chineseToPinyin {
     )
 
     $res = ( node F:\Material\Github_down\javascript\webUtils\test\pinying.js $word )
-    
+
     if ($res.Length -gt 1) {
         $res.toLower().Substring(0, 2)
+    }
+}
+
+function xm () {
+    # 项目 xiang mu
+    param(
+        [ValidateSet("yx")]
+        [string]
+        $i
+    )
+
+    switch ($i) {
+        AppId { "wx2ab56f448b56ce6a" | clip}
+        yx { $Global:myMsg.yx | clip }
     }
 }

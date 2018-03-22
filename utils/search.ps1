@@ -1,18 +1,57 @@
-function searchNetAbstract {
+function ns {
+    # net search
     param(
+        [ValidateSet("bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType", "searchBookmarksOfChrome")]
         [string]
-        $keyWord,
-        [string]
-        $address,
-        [string]
-        $searchFragment
+        $net,
+        [array]
+        $keyWord
     ) 
 
-    if ($keyWord -ne '') {
-        $address = $address + $searchFragment + $keyWord
+    $keyWord = ($keyWord -join " ")
+
+    switch ($net) {
+        g2 {
+            if ($keyWord -ne '') {
+                Start-Process https://www.google.com/search?q=$keyWord
+            }
+            else {
+                Start-Process https://www.google.com/
+            }
+        }
+        bk {
+            if ($keyWord -ne '') {
+                start-process https://baike.baidu.com/item/$keyWord
+            }
+            else {
+                Start-Process https://baike.baidu.com/
+            }
+        }
+        segmentfault {
+            Start-Process https://segmentfault.com/search?q=$keyWord
+        }
+        stackoverflow {
+            if ($keyWord -ne '') {
+                Start-Process https://stackoverflow.com/search?q=$keyWord
+            }
+            else {
+                Start-Process https://stackoverflow.com/
+            }
+        }
+        bd {
+            Start-Process https://www.baidu.com/s?wd=$keyWord
+        }
+        searchBookmarksOfChrome {
+            $keyWord = $keyWord.ToLower()
+            $bookmarks = bookmarksOfChrome | Select-Object -Index 1
+            $result = $bookmarks | Where-Object {$_.Name.ToLower() -like "*$keyWord*"}
+
+            ($result | Select-Object -First 1 | Select-Object url).url | clip.exe
+            $result 
+        }
+        Default { }
     }
 
-    Start-Process $address
 }
 function bd {
     # eg. bd powershellAPI -> baidu.com search powershellAPI
@@ -23,31 +62,6 @@ function bd {
     }
     else {
         Start-Process https://www.baidu.com/
-    }
-}
-function bk {
-    # eg. bk powershell -> baidubaike search powershell
-    $keyWord = ($args -join " ")
-    if ($keyWord -ne '') {
-        start-process https://baike.baidu.com/item/$keyWord
-    }
-    else {
-        Start-Process https://baike.baidu.com/
-    }
-
-    # $address = "https://baike.baidu.com/"
-    # $searchFragment = "item/"
-
-    # searchNetAbstract($keyWord, $address, $searchFragment)
-}
-function g2 {
-    # eg. g2 powershellAPI -> google.com search powershellAPI
-    $keyWord = ($args -join " ")
-    if ($keyWord -ne '') {
-        Start-Process https://www.google.com/search?q=$keyWord
-    }
-    else {
-        Start-Process https://www.google.com/
     }
 }
 function searchBookmarksOfChrome {
@@ -142,24 +156,3 @@ function ss_wpy ($i, $contextCnt = 0, $isCaseSensitive = $false) {
     }
 }
 
-function segmentfault {
-    $keyWord = ($args -join " ")
-
-    if ($keyWord -ne '') {
-        Start-Process https://segmentfault.com/search?q=$keyWord
-    }
-    else {
-        Start-Process https://segmentfault.com/
-    }
-}
-
-function stackoverflow {
-    $keyWord = ($args -join " ")
-
-    if ($keyWord -ne '') {
-        Start-Process https://stackoverflow.com/search?q=$keyWord
-    }
-    else {
-        Start-Process https://stackoverflow.com/
-    }
-}

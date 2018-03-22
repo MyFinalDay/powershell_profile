@@ -17,6 +17,8 @@ Write-Host "`nExport Alias, History..."
 
 Set-Content E:\DataIn\SettingPowershell\tmpShudownInfo.txt ([datetime]::Now)
 
+. E:\DataIn\PowershellScriptData\utils\sendMsglog.ps1
+
 Write-Host "`nShutdown..."
 shutdown -s -t 8
 
