@@ -13,6 +13,29 @@
 # setting
 $Host.UI.RawUI.WindowTitle = '*\(*^_^*)/*' + '    ' + (date)
 
+enum ProgramEnum {
+    gvim
+    firefox
+    chrome
+    powershell
+    qq
+    Code
+    gitBash
+
+    wechatdevtools
+    mongobooster
+    emacs
+    EgretWing
+    Postman
+    webstorm64
+    IDEA
+    powershell_ise
+    searchEveryting
+    weChat
+    baiduDisk
+    sublime_text
+}
+
 # Function
 
 function he {
@@ -24,6 +47,14 @@ function he {
 
 function getHistoryMatchChinese() {
     Get-History | Where-Object {[int[]][char[]]$_.CommandLine.ToString() -ge 255}
+}
+
+function tryEnum {
+    param(
+        [ProgramEnum]
+        $i
+    ) 
+    $i
 }
 
 function wsAll {
@@ -67,12 +98,20 @@ function killLastPS($i) {
 
 function killLastPS_quick {
     # Stop-Process(only some special process use killLastPS for normal) eg. killPS powershell -> kill the last start-up powershell 
+    # param(
+    #     [ValidateSet("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
+    #         "wechatdevtools", "mongobooster", "emacs")]
+    #     [string]
+    #     $process 
+    # )
+
     param(
-        [ValidateSet("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
-            "wechatdevtools", "mongobooster", "emacs")]
-        [string]
-        $process 
+        [ProgramEnum]
+        $pg
     )
+
+    $process=$pg.ToString()
+
     $ErrorActionPreference = "SilentlyContinue"
     Get-Process $process | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process 
     $ErrorActionPreference = "Continue"
@@ -171,26 +210,32 @@ function typeFile () {
 # <- start program.exe
 function pg {
     # pg gvim
+    # param(
+    #     [ValidateSet("gvim", "firefox", "chrome", "powershell", "qq", "Code", "gitBash",
+    #         "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64",
+    #         "IDEA", "powershell_ise", "searchEveryting", "weChat", "baiduDisk", "sublime_text" )]
+    #     [string]
+    #     $process 
+    # )
     param(
-        [ValidateSet("gvim", "firefox", "chrome", "powershell", "qq", "Code", "gitBash",
-            "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64",
-            "IDEA", "powershell_ise", "searchEveryting", "weChat", "baiduDisk", "sublime_text" )]
-        [string]
-        $process 
+        [ProgramEnum]
+        $pg
     )
 
+    $process = $pg.ToString()
+
     switch ($process) {
-        gvim {  Start-Process $Global:processPathHash[$process] -WindowStyle Maximized }
+        gvim {  Start-Process $Global:programPathHash[$process] -WindowStyle Maximized }
         gitBash { 
-            Start-Process $Global:processPathHash[$process] -Verb runAs
+            Start-Process $Global:programPathHash[$process] -Verb runAs
             $path = (Get-Location).Path
             $path = changeCRLFToLF $path
             $path = "cd " + $path
             $path | clip.exe
         }
-        powershell { Start-Process $Global:processPathHash[$process] -Verb runAs }
-        powershell_ise { Start-Process $Global:processPathHash[$process] -Verb runAs }
-        Default { Start-Process $Global:processPathHash[$process] }
+        powershell { Start-Process $Global:programPathHash[$process] -Verb runAs }
+        powershell_ise { Start-Process $Global:programPathHash[$process] -Verb runAs }
+        Default { Start-Process $Global:programPathHash[$process] }
     }
 }
 # program ->
@@ -400,8 +445,8 @@ function loopChangeScreen {
     '$Host.UI.RawUI.ForegroundColor = "Gray"' | clip
     $RawUI = $Host.UI.RawUI
     $consoleColorArr = [System.Enum]::GetNames( [System.ConsoleColor] )
-    $interval = getRandom -start 1 -end 12 -count 1000
-    $interval | ForEach-Object { $RawUI.ForegroundColor = $consoleColorArr | Get-Random ; coverScreen; Start-Sleep -Seconds $_ ; changeScreen }
+    $interval = getRandom -start 1 -end 30 -count 60000
+    $interval | ForEach-Object { $RawUI.ForegroundColor = $consoleColorArr | Get-Random ; coverScreen; Start-Sleep -Milliseconds $_ ; changeScreen }
 }
 function coverScreen {
     # cover screen with random string
@@ -597,8 +642,8 @@ function IsAdminUser {
 # } 
 function rmExculeConfig {
     # move dist/ to reclyeBin exclude *config*
-    # Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\dist'
-    Set-Location 'E:\DataIn\VScodeData\newTestXiaoChengXu\testWepy\project2\dist'
+    Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\dist'
+    # Set-Location 'E:\DataIn\VScodeData\newTestXiaoChengXu\testWepy\project2\dist'
     $ErrorActionPreference = "SilentlyContinue"
     Remove-Item * -Recurse -Exclude *config*
     'rm -r `ls | grep -v *config*`' | clip

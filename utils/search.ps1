@@ -12,12 +12,7 @@ function ns {
 
     switch ($net) {
         g2 {
-            if ($keyWord -ne '') {
-                Start-Process https://www.google.com/search?q=$keyWord
-            }
-            else {
-                Start-Process https://www.google.com/
-            }
+            Start-Process https://www.google.com/search?q=$keyWord
         }
         bk {
             if ($keyWord -ne '') {

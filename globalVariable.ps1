@@ -2,6 +2,7 @@
 $Global:myStr1 = @"
  |\ ^&_-+=$,;\)@~%`][<. ;:}{*!T>/o01OIl'
 "@
+
 $Global:usualPsArr = @("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
     "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "powershell_ise")
 
@@ -21,14 +22,16 @@ $Global:myWorkPathHash = @{
     treatmentCheck      = 'E:\DataIn\WorkFor\treatmentCheck\client\src\components';
     sp_BusinessCard     = 'E:\DataIn\WorkFor\sp-BusinessCard\mobile\pages';
     officialWebsite2018 = 'E:\DataIn\WorkFor\officialWebsite2018\client';
-    bubuweiying         = 'E:\DataIn\WorkFor\bubuweiying\';
+
+    bubuweiying         = 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying';
     bubuweiyingSrc      = 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\src';
     bubuweiyingImg      = 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\src\images';
     descriptionDoc      = 'E:\DataIn\WorkFor\DescriptionDocument\bubuweiying';
     wepy                = 'E:\DataIn\VScodeData\newTestXiaoChengXu\testWepy';
+    wxYuHan             = 'E:\DataIn\VScodeData\newTestXiaoChengXu\wxYuHanStore\src\pages';
 }
 
-$Global:processPathHash = @{
+$Global:programPathHash = @{
     gvim              = 'E:\UserSoft\amixVim\vim80\gvim.exe';
     weChat            = 'E:\UserSoft\WeChat\WeChat.exe'
     gitBash           = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk';
@@ -56,5 +59,7 @@ $Global:AppInfoMap = Get-WmiObject -Class Win32_OperatingSystem
 
 $Global:myMsg = @{
     AppId = 'wx97807883a836a66d';
-    yx    = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx%E5%8E%9F%E5%9E%8B/bb%E6%AD%A5%E6%AD%A5%E4%B8%BA%E7%9B%88_%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%AB%AF%E5%8E%9F%E5%9E%8B_0314/start.html#g=1&p=%E9%9A%8F%E6%9C%BA%E7%BB%84%E9%98%9F_%E5%88%9B%E5%BB%BA%E9%98%9F%E4%BC%8D';
+    yx    = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx/bbwy_yx_0314/start.html';
 }
+
+$Global:yx = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx/bbwy_yx_0314/start.html'

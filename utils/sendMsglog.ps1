@@ -25,7 +25,7 @@ $intPtr = $Console.MainWindowHandle
 [User32Helper]::SetForegroundWindow($intPtr)
 #4. 输入你要执行的命令
 
-[System.Windows.Forms.SendKeys]::SendWait('$Host.UI.RawUI.WindowTitle="*\(*^_^*)/*"')
+[System.Windows.Forms.SendKeys]::SendWait('"*\(*^_^*)/*"')
 
 [System.Windows.Forms.SendKeys]::SendWait("{Enter}")
 
@@ -66,6 +66,7 @@ Start-Sleep -Seconds 5
 
 #Get-Process "powershell" | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process
 
-# [System.Windows.Forms.SendKeys]::SendWait("exit")
+[System.Windows.Forms.SendKeys]::SendWait("exit")
 
-# [System.Windows.Forms.SendKeys]::SendWait("{Enter}")
+[System.Windows.Forms.SendKeys]::SendWait("{Enter}")
+

@@ -76,7 +76,7 @@ function saveCurrentPath () {
 
 function arroundSymbol {
     param(
-        [validateset("singleQuotes", "doubleQuotes", "parentheses", "getType")]
+        [validateset("singleQuotes", "doubleQuotes", "parentheses", "getType", "Length", "ToString", "int32")]
         $symbol,
         [string]
         $word
@@ -95,6 +95,9 @@ function arroundSymbol {
         doubleQuotes { '"' + $res + '"' | clip }
         parentheses { "(" + $res + ")" | clip }
         getType { "(" + $res + ").GetType()" | clip }
+        Length { "(" + $res + ").Length" | clip }
+        ToString { "(" + $res + ").ToString()" | clip }
+        int32 { "[int][char]('" + $res + "')" | clip }
     }
 }
 
