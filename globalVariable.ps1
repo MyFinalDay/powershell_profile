@@ -29,12 +29,16 @@ $Global:myWorkPathHash = @{
     descriptionDoc      = 'E:\DataIn\WorkFor\DescriptionDocument\bubuweiying';
     wepy                = 'E:\DataIn\VScodeData\newTestXiaoChengXu\testWepy';
     wxYuHan             = 'E:\DataIn\VScodeData\newTestXiaoChengXu\wxYuHanStore\src\pages';
+
+    tripShoot           = 'E:\DataIn\WorkFor\tripShoot\mobile';
 }
 
 $Global:programPathHash = @{
     gvim              = 'E:\UserSoft\amixVim\vim80\gvim.exe';
     weChat            = 'E:\UserSoft\WeChat\WeChat.exe'
     gitBash           = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk';
+    'notepad++'       = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Notepad++\Notepad++.lnk';
+    BingDict          = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\??????\????.lnk';
     ideaLicenseServer = 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk' ;
     webstorm64        = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk';
     chrome            = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe';
@@ -42,13 +46,17 @@ $Global:programPathHash = @{
     wechatdevtools    = 'E:\UserSoft\??web?????\wechatdevtools.exe';
     powershell        = 'C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe'
     firefox           = 'E:\UserSoft\Firefox_64\firefox.exe';
+
     sublime_text      = 'E:\UserSoft\Sublime Text 3x64\sublime_text.exe';
     IDEA              = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\IntelliJ IDEA Ultimate.lnk';
     Postman           = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Postman\Postman.lnk';
     emacs             = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Gnu Emacs\Emacs.lnk';
     powershell_ise    = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell ISE.lnk';
-    searchEveryting   = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Everything\Search Everything.lnk';
+    Everyting   = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Everything\Search Everything.lnk';
     baiduDisk         = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\????\????.lnk';
+    Wox               = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Wox\Wox.lnk';
+    sndvol            = 'C:\WINDOWS\system32\SndVol.exe';
+    Everything        = 'E:\UserSoft\Everything\Everything.exe';
 }
 
 $Global:myUsualFilePath = @{

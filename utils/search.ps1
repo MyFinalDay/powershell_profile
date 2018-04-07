@@ -1,19 +1,24 @@
 function ns {
     # net search
     param(
-        [ValidateSet("bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType", "searchBookmarksOfChrome")]
+        [ValidateSet("bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType",
+            "searchBookmarksOfChrome", "github", "googleTranslate", "baiduTranslate")]
         [string]
-        $net,
-        [array]
-        $keyWord
+        $net
     ) 
 
-    $keyWord = ($keyWord -join " ")
+    $keyWord = $args -join " "
 
     switch ($net) {
-        g2 {
-            Start-Process https://www.google.com/search?q=$keyWord
+        googleTranslate {
+            if ([int][char]$keyWord[0] -le 255) {
+                Start-Process "https://translate.google.cn/#en/zh-CN/$keyWord"
+            }
+            else {
+                Start-Process "https://translate.google.cn/#zh-CN/en/$keyWord"
+            }
         }
+        g2 { Start-Process https://www.google.com/search?q=$keyWord }
         bk {
             if ($keyWord -ne '') {
                 start-process https://baike.baidu.com/item/$keyWord
@@ -22,9 +27,7 @@ function ns {
                 Start-Process https://baike.baidu.com/
             }
         }
-        segmentfault {
-            Start-Process https://segmentfault.com/search?q=$keyWord
-        }
+        segmentfault { Start-Process https://segmentfault.com/search?q=$keyWord }
         stackoverflow {
             if ($keyWord -ne '') {
                 Start-Process https://stackoverflow.com/search?q=$keyWord
@@ -33,9 +36,8 @@ function ns {
                 Start-Process https://stackoverflow.com/
             }
         }
-        bd {
-            Start-Process https://www.baidu.com/s?wd=$keyWord
-        }
+        bd { Start-Process https://www.baidu.com/s?wd=$keyWord }
+        github { Start-Process https://github.com/search?q=$keyWord }
         searchBookmarksOfChrome {
             $keyWord = $keyWord.ToLower()
             $bookmarks = bookmarksOfChrome | Select-Object -Index 1
@@ -44,9 +46,11 @@ function ns {
             ($result | Select-Object -First 1 | Select-Object url).url | clip.exe
             $result 
         }
+        baiduTranslate {
+            Start-Process http://fanyi.baidu.com/
+        }
         Default { }
     }
-
 }
 function bd {
     # eg. bd powershellAPI -> baidu.com search powershellAPI
@@ -94,18 +98,17 @@ function searchDuplicateFile() {
         Write-Host "`n Search finish!`n" -ForegroundColor Green
     }
 }
-function searchVariableAssemblies ($serachText) {
-    [System.AppDomain]::CurrentDomain.GetAssemblies() 
-}
+
+# [System.AppDomain]::CurrentDomain.GetAssemblies() 
 function ss {
     # find string eg. ss isNumeric -> find string 'isNumeric' or ss isNumeric 3 -> find string 'isNumeric' and 3 lines context
-    # eg. ss height 1 $false wxml -> find string 'height' from wxml
+    # eg. ss height wxml 1 $false -> find string 'height' from wxml
     # Get-ChildItem .\*.js -Recurse | Select-String $i -Context $contextCnt
     param(
         $searchPattern,
+        $fileExtension = "js",
         $contextCnt = 0,
-        $isCaseSensitive = $false,
-        $fileExtension = "js"
+        $isCaseSensitive = $false
     )
     if ($isCaseSensitive) {
         Get-ChildItem . -Include "*.$fileExtension" -Recurse | Select-String $searchPattern -CaseSensitive -Context $contextCnt
@@ -139,15 +142,5 @@ function bd_FileType {
     $keyWord = $keyWord + " fileType:" + $fileType
 
     bd $keyWord
-}
-function ss_wpy ($i, $contextCnt = 0, $isCaseSensitive = $false) {
-    # find string eg. ss isNumeric -> find string 'isNumeric' or ss isNumeric 3 -> find string 'isNumeric' and 3 lines context
-    # Get-ChildItem .\*.wpy -Recurse | Select-String $i -Context $contextCnt
-    if ($isCaseSensitive) {
-        Get-ChildItem . -Include *.wpy -Recurse | Select-String $i -CaseSensitive -Context $contextCnt
-    }
-    else {
-        Get-ChildItem . -Include *.wpy -Recurse | Select-String $i -Context $contextCnt
-    }
 }
 

@@ -17,6 +17,20 @@ function logSizeHuman ($i) {
         $res
     }
 }
+
+function handleSpeicalSymbol {
+    param(
+        $pg
+    )
+
+    $process = $pg.ToString()
+    if ($process.StartsWith('notepad')) {
+        $process += '++'
+    }
+
+    return $process
+}
+
 function getPsSum ($process) {
     $processWs = (Get-Process $process | Measure-Object -Property WS -Sum).Sum
     $processWs = (logSizeHuman($processWs))
@@ -73,6 +87,22 @@ function saveCurrentPath () {
     $Global:lastAccessPath | clip
     $Global:lastAccessPath
 }
+function defaultLastHistory {
+    # if input null choose last history
+    param(
+        $i
+    ) 
+
+    if ($i -ne '') {
+        $res = $i
+    }
+    else {
+        $res = Get-History | Select-Object -Last 1
+        $res = $res.CommandLine
+    }
+
+    return $res
+}
 
 function arroundSymbol {
     param(
@@ -82,13 +112,7 @@ function arroundSymbol {
         $word
     )
 
-    if ($word -ne '') {
-        $res = $word
-    }
-    else {
-        $res = Get-History | Select-Object -Last 1
-        $res = $res.CommandLine
-    }
+    $res = defaultLastHistory $word
 
     switch ($symbol) {
         singleQuotes { "'" + $res + "'" | clip }
@@ -106,6 +130,7 @@ function changeCRLFToLF {
     param(
         [string]$path
     )
+
     if (Test-Path $path) {
         $path = '/' + $path.Replace('\', '/').replace(':', '') 
         $path | clip

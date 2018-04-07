@@ -3,7 +3,7 @@
 . E:\DataIn\PowershellScriptData\commonPsLib.ps1
 # utils
 . E:\DataIn\PowershellScriptData\utils\search.ps1
-. E:\DataIn\PowershellScriptData\utils\baiduTranslate.ps1
+. E:\DataIn\PowershellScriptData\utils\translate.ps1
 . E:\DataIn\PowershellScriptData\utils\quickSend163Email.ps1
 . E:\DataIn\PowershellScriptData\utils\note.ps1
 
@@ -21,19 +21,23 @@ enum ProgramEnum {
     qq
     Code
     gitBash
-
     wechatdevtools
     mongobooster
+
     emacs
     EgretWing
     Postman
     webstorm64
     IDEA
     powershell_ise
-    searchEveryting
+    Everything
     weChat
     baiduDisk
     sublime_text
+
+    notepad
+    Wox
+    BingDict
 }
 
 # Function
@@ -49,22 +53,15 @@ function getHistoryMatchChinese() {
     Get-History | Where-Object {[int[]][char[]]$_.CommandLine.ToString() -ge 255}
 }
 
-function tryEnum {
-    param(
-        [ProgramEnum]
-        $i
-    ) 
-    $i
-}
-
 function wsAll {
     # Get process WorkingSet eg. wsAll firefox -> 632MB (only some specail process, use [getWsAllNormal ] for another process)
     param(
-        [ValidateSet("gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
-            "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64", "powershell_ise", "vim")]
-        [string]
-        $process 
+        [ProgramEnum]
+        $pg
     )
+
+    $process = handleSpeicalSymbol $pg
+
     $processWs = getPsSum($process)
     $processWs
 }
@@ -98,19 +95,11 @@ function killLastPS($i) {
 
 function killLastPS_quick {
     # Stop-Process(only some special process use killLastPS for normal) eg. killPS powershell -> kill the last start-up powershell 
-    # param(
-    #     [ValidateSet("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
-    #         "wechatdevtools", "mongobooster", "emacs")]
-    #     [string]
-    #     $process 
-    # )
-
     param(
         [ProgramEnum]
         $pg
     )
-
-    $process=$pg.ToString()
+    $process = handleSpeicalSymbol $pg
 
     $ErrorActionPreference = "SilentlyContinue"
     Get-Process $process | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process 
@@ -210,22 +199,33 @@ function typeFile () {
 # <- start program.exe
 function pg {
     # pg gvim
-    # param(
-    #     [ValidateSet("gvim", "firefox", "chrome", "powershell", "qq", "Code", "gitBash",
-    #         "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "webstorm64",
-    #         "IDEA", "powershell_ise", "searchEveryting", "weChat", "baiduDisk", "sublime_text" )]
-    #     [string]
-    #     $process 
-    # )
     param(
         [ProgramEnum]
-        $pg
+        $pg,
+        [string]
+        $filename
     )
 
-    $process = $pg.ToString()
+    $process = handleSpeicalSymbol $pg
+
+    if ($filename) {
+        if (Test-Path $filename) {
+            $filename = (Get-Item $filename).FullName
+        }
+        elseif ($filename -eq '1') {
+            $filename = ( Get-ChildItem -File . | Sort-Object LastAccessTime -Descending | Select-Object -First 1 ).FullName
+        }
+    }
 
     switch ($process) {
-        gvim {  Start-Process $Global:programPathHash[$process] -WindowStyle Maximized }
+        gvim { 
+            if ($filename) {
+                Start-Process $Global:programPathHash[$process] $filename -WindowStyle Maximized 
+            }
+            else {
+                Start-Process $Global:programPathHash[$process] -WindowStyle Maximized 
+            }
+        }
         gitBash { 
             Start-Process $Global:programPathHash[$process] -Verb runAs
             $path = (Get-Location).Path
@@ -235,6 +235,14 @@ function pg {
         }
         powershell { Start-Process $Global:programPathHash[$process] -Verb runAs }
         powershell_ise { Start-Process $Global:programPathHash[$process] -Verb runAs }
+        firefox {
+            if ($filename) {
+                Start-Process $Global:programPathHash[$process] $filename 
+            }
+            else {
+                Start-Process $Global:programPathHash[$process] 
+            }
+         }
         Default { Start-Process $Global:programPathHash[$process] }
     }
 }
@@ -537,19 +545,6 @@ function addFavoritePath {
 # function getFavouritePath {
 #     Get-Content -Path E:\DataIn\SettingPowershell\tmpFavouritePath.txt -Encoding UTF8 
 # }
-function getType2 {
-    $word = ($args -join " ")
-    if ($word -ne '') {
-        $res = addParentheses $word
-    }
-    else {
-        $res = Get-History | Select-Object -Last 1
-        $res = addParentheses $res.CommandLine
-    }
-    $res = $res + ".GetType()"
-    $res | clip
-    $res
-}
 function riRecent {
     # move recnetly $cnt file to reclycleBin eg. riRecnet 3 -> recycleBin 3 files recently
     param(
@@ -675,6 +670,7 @@ function sll {
     param(
         [string]
         $location,
+        [ValidateSet("e", "g", "b", "s", "md", "ni", "np", "st", "slf")]
         [string]
         $openType
     ) 
@@ -692,15 +688,33 @@ function sll {
 
     saveCurrentPath
 
+    $fileName = ( Get-ChildItem -File . | Sort-Object Length | Select-Object -First 1 ).fullname
+
+    function openFile {
+        param(
+            [ProgramEnum]
+            $pg
+        )
+
+        $process = handleSpeicalSymbol $pg
+        Start-Process $Global:programPathHash[$process] $fileName
+    }
+
     switch ($openType) {
         'e' { explorer.exe . }
-        'g' { pg gvim }
+        'g' { openFile( [ProgramEnum]"gvim" ) }
 
         'b' { quickStartGitBash }
         's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3 }
 
         'md' { New-Item -ItemType Directory -Name (genRandomStr) }
         'ni' { New-Item -ItemType File -Name (genRandomStr) }
+
+
+        'np' { openFile([ProgramEnum]"notepad") }
+        'st' { openFile([ProgramEnum]"sublime_text") }
+
+        'slf' { slf }
         Default {}
     }
 }
@@ -749,5 +763,22 @@ function xm () {
     switch ($i) {
         AppId { "wx2ab56f448b56ce6a" | clip}
         yx { $Global:myMsg.yx | clip }
+    }
+}
+
+function zs {
+    param(
+        [string]
+        $i
+    )
+
+    switch ($i) {
+        p { 
+            # window path to git-bash path
+            saveCurrentPath            
+            $res = changeCRLFToLF  $Global:lastAccessPath
+            $res = 'cd ' + $res | clip
+        }
+        Default {}
     }
 }

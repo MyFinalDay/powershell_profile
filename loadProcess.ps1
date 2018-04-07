@@ -13,6 +13,7 @@ $firfox = "start E:\UserSoft\Firefox_64\firefox.exe"
 
 $wox = "start C:\Users\mydell\AppData\Local\Wox\app-1.3.183\Wox.exe"
 $cmder = "start E:\UserSoft\conEmu2\ConEmu64.exe"
+$emacs = "start 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Gnu Emacs\Emacs.lnk'";
 
 $ideaLicenseServer = "start 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk'"
 $westorm64 = "start 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk'"
@@ -41,6 +42,7 @@ Write-Host "Open...".PadLeft(20)
 Invoke-Expression $wox
 
 Invoke-Expression $cmder
+Invoke-Expression $emacs
 Invoke-Expression $chrome
 
 # Start-Process powershell -Verb runas

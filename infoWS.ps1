@@ -2,7 +2,7 @@
 # some variables
 # ******************************************************************************** 
 
-Get-Date
+-join ((Get-Date), '  ', (Get-Date).DayOfWeek)
 
 # ******************************************************************************** 
 # some function
@@ -135,7 +135,7 @@ function logSizeHuman ($i) {
             $res = ($i / 1Gb).ToString('f2') + " GB"
         }
         elseif ($i -gt 0.9Mb) {
-            $res = ($i / 1Mb).ToString('f1') + " MB"
+            $res = ($i / 1Mb).ToString('f0') + " MB"
         }
         elseif ($i -gt 1Kb) {
             $res = ($i / 1Kb).ToString('f1') + " KB"
