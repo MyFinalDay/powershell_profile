@@ -2,7 +2,8 @@ function ns {
     # net search
     param(
         [ValidateSet("bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType",
-            "searchBookmarksOfChrome", "github", "googleTranslate", "baiduTranslate")]
+            "searchBookmarksOfChrome", "github", "googleTranslate", "baiduTranslate",
+            "codepen")]
         [string]
         $net
     ) 
@@ -48,6 +49,9 @@ function ns {
         }
         baiduTranslate {
             Start-Process http://fanyi.baidu.com/
+        }
+        codepen {
+            Start-Process https://codepen.io/search/pens?q=$keyWord
         }
         Default { }
     }
@@ -124,7 +128,7 @@ function findBigFile ($i) {
         Format-Table @{Label = " Name "; Expression = {" " * 5 + $_.Name.ToString() + " " * 1}; alignment = "left";
     }, @{Label = "  Length(Kb)  "; Expression = {$_.Length / 1Kb -as [int]}; alignment = "center";
     } , @{Label = "Directory"; Expression = {$_.directory.ToString().substring((Get-Location).Path.Length)}}
-    $totalLength = (getLenAll .)
+    $totalLength = (mr LengthAll .)
     Write-Host "Total recurse:" $totalLength
     Write-Host ""
 }
@@ -144,3 +148,17 @@ function bd_FileType {
     bd $keyWord
 }
 
+function ns_site_search {
+    param(
+        [ValidateSet("segmentfault")]
+        [string]
+        $type
+    )    
+
+    $keyWord = $args -join " "
+
+    switch ($type) {
+        segmentfault { ns bd 'site:segmentfault.com ' $keyWord }
+        Default {}
+    }
+}

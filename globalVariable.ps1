@@ -17,6 +17,9 @@ $Global:myPslibFilePath = @{
 $Global:myWorkPathHash = @{
     appJs               = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\';
     weChatTmpFile       = 'C:\Users\mydell\Documents\WeChat Files\wxid_fodh1nkdqos422\Files';
+    emacsRecentFile     = 'E:\UserSoft\Ecmas\emacs\bin\RecentFlie';
+    forQuickTest        = 'E:\DataIn\VScodeData\forQuickTest';
+
     tutorPlatform       = 'E:\DataIn\WorkFor\tutorPlatform\client\admin\src\components\backend';
     yjxy_wxapp          = 'E:\DataIn\WorkFor\yjxy-wxapp\admin\src\components';
     treatmentCheck      = 'E:\DataIn\WorkFor\treatmentCheck\client\src\components';
@@ -31,32 +34,45 @@ $Global:myWorkPathHash = @{
     wxYuHan             = 'E:\DataIn\VScodeData\newTestXiaoChengXu\wxYuHanStore\src\pages';
 
     tripShoot           = 'E:\DataIn\WorkFor\tripShoot\mobile';
+    weilairensheng      = 'E:\DataIn\WorkFor\weilairensheng';
 }
 
 $Global:programPathHash = @{
-    gvim              = 'E:\UserSoft\amixVim\vim80\gvim.exe';
-    weChat            = 'E:\UserSoft\WeChat\WeChat.exe'
-    gitBash           = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk';
-    'notepad++'       = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Notepad++\Notepad++.lnk';
-    BingDict          = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\??????\????.lnk';
-    ideaLicenseServer = 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk' ;
-    webstorm64        = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk';
-    chrome            = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe';
-    qq                = 'C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe';
-    wechatdevtools    = 'E:\UserSoft\??web?????\wechatdevtools.exe';
-    powershell        = 'C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe'
-    firefox           = 'E:\UserSoft\Firefox_64\firefox.exe';
+    gvim                    = 'E:\UserSoft\amixVim\vim80\gvim.exe';
+    weChat                  = 'E:\UserSoft\WeChat\WeChat.exe'
+    gitBash                 = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git\Git Bash.lnk';
+    'notepad++'             = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Notepad++\Notepad++.lnk';
+    BingDict                = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\??????\????.lnk';
+    ideaLicenseServer       = 'C:\Users\mydell\Desktop\IntelliJIDEALicenseServer_windows_amd64.exe - ????.lnk' ;
+    webstorm64              = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\WebStorm.lnk';
+    chrome                  = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe';
+    qq                      = 'C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe';
+    wechatdevtools          = 'E:\UserSoft\??web?????\wechatdevtools.exe';
+    powershell              = 'C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe'
+    firefox                 = 'E:\UserSoft\Firefox_64\firefox.exe';
 
-    sublime_text      = 'E:\UserSoft\Sublime Text 3x64\sublime_text.exe';
-    IDEA              = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\IntelliJ IDEA Ultimate.lnk';
-    Postman           = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Postman\Postman.lnk';
-    emacs             = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Gnu Emacs\Emacs.lnk';
-    powershell_ise    = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell ISE.lnk';
-    Everyting   = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Everything\Search Everything.lnk';
-    baiduDisk         = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\????\????.lnk';
-    Wox               = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Wox\Wox.lnk';
-    sndvol            = 'C:\WINDOWS\system32\SndVol.exe';
-    Everything        = 'E:\UserSoft\Everything\Everything.exe';
+    sublime_text            = 'E:\UserSoft\Sublime Text 3x64\sublime_text.exe';
+    IDEA                    = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\IntelliJ IDEA Ultimate.lnk';
+    Postman                 = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Postman\Postman.lnk';
+    emacs                   = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Gnu Emacs\Emacs.lnk';
+    powershell_ise          = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell ISE.lnk';
+    Everyting               = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Everything\Search Everything.lnk';
+    baiduDisk               = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\????\????.lnk';
+    Wox                     = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Wox\Wox.lnk';
+    sndvol                  = 'C:\WINDOWS\system32\SndVol.exe';
+    Everything              = 'E:\UserSoft\Everything\Everything.exe';
+    kuaibu                  = 'E:\UserSoft\Kuaibu\kuaibu\kuaibu.exe';
+    PotPlayerMini64         = 'E:\UserSoft\PotPlayer\PotPlayerMini64.exe';
+
+    ConEmu64                = 'E:\UserSoft\conEmu2\ConEmu64.exe';
+    node                    = 'E:\UserSoft\nodeJS\node.exe';
+    FSViewer                = 'E:\UserSoft\FastStone Image Viewer\FSViewer.exe';
+    
+    'Microsoft.Msn.Weather' = 'C:\Program Files\WindowsApps\Microsoft.BingWeather_4.23.10923.0_x64__8wekyb3d8bbwe\Microsoft.Msn.Weather.exe';
+}
+
+$Global:myUtilPath = @{
+    colorTable = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\brower\dom\colorTable.html';
 }
 
 $Global:myUsualFilePath = @{

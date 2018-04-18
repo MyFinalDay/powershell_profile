@@ -38,6 +38,12 @@ enum ProgramEnum {
     notepad
     Wox
     BingDict
+    kuaibu
+    PotPlayerMini64   
+    ConEmu64          
+    node
+    FSViewer          
+    Weather
 }
 
 # Function
@@ -242,7 +248,7 @@ function pg {
             else {
                 Start-Process $Global:programPathHash[$process] 
             }
-         }
+        }
         Default { Start-Process $Global:programPathHash[$process] }
     }
 }
@@ -637,10 +643,10 @@ function IsAdminUser {
 # } 
 function rmExculeConfig {
     # move dist/ to reclyeBin exclude *config*
-    Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\dist'
+    # Set-Location 'E:\DataIn\WorkFor\bubuweiying\wxapp_bubuweiying\dist'
     # Set-Location 'E:\DataIn\VScodeData\newTestXiaoChengXu\testWepy\project2\dist'
     $ErrorActionPreference = "SilentlyContinue"
-    Remove-Item * -Recurse -Exclude *config*
+    # Remove-Item * -Recurse -Exclude *config*
     'rm -r `ls | grep -v *config*`' | clip
     $ErrorActionPreference = "Continue"
 }
@@ -702,7 +708,7 @@ function sll {
 
     switch ($openType) {
         'e' { explorer.exe . }
-        'g' { openFile( [ProgramEnum]"gvim" ) }
+        'g' { pg gvim }
 
         'b' { quickStartGitBash }
         's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3 }
@@ -722,21 +728,23 @@ function sll {
 function reNameWithPinying {
     # rename  eg. reNameWithPinyin 文档2 -> w文档2
     param(
-        [string]
-        $name,
+        [System.IO.FileSystemInfo]
+        $item,
         [string]
         $firstAlpha
     ) 
 
-    $name = (Get-Item $name).Name
-    if ([int][char]$name[0] -le 255) {
+    $oldName = $item.Name
+    $oldFullname = $item.FullName
+    if ([int][char]$oldName[0] -le 255) {
         return
     }
     else {
-        $newName = $firstAlpha + $name
-        Rename-Item $name $newName
+        $newName = $firstAlpha + $oldName
+        Rename-Item $oldFullname $newName
     }
 }
+
 
 function chineseToPinyin {
     # change Chinese characters to pinyin eg. chineseToPinyin '汉字' -> h
@@ -768,17 +776,72 @@ function xm () {
 
 function zs {
     param(
+        [ValidateSet("path", "reNamePinyin_quick", "reNamePinyin_recuresDeepPath2")]
         [string]
-        $i
+        $type
     )
 
-    switch ($i) {
-        p { 
+    $paramArr = ($args -join '')
+
+    switch ($type) {
+        path { 
             # window path to git-bash path
             saveCurrentPath            
             $res = changeCRLFToLF  $Global:lastAccessPath
             $res = 'cd ' + $res | clip
         }
+
+        reNamePinyin_quick {
+            $item = ( Get-ChildItem $paramArr )
+            $item | ForEach-Object { reNameWithPinying -item $_ -firstAlpha ( chineseToPinyin $_.ToString().Substring(0, 2) ) }
+        }
+
+        reNamePinyin_recuresDeepPath2 {
+            $item = (Get-ChildItem -Recurse $paramArr)
+            $item | ForEach-Object { reNameWithPinying -item $_ -firstAlpha ( chineseToPinyin $_.ToString().Substring(0, 2) ) }
+        }
         Default {}
     }
+}
+
+function timeReminding {
+    # 
+    param(
+        [double]
+        $cnt = 10,
+        [string]
+        [ValidateSet("", "seconds", "minute", "hour")]
+        $timeType = 'seconds'
+    )
+
+    function startSleepByType {
+        param(
+            [double]
+            $cnt = 10,
+            [string]
+            $timeType = 'seconds'
+        )
+        switch ($timeType) {
+            seconds { Start-Sleep -Seconds $cnt; }
+            minute { Start-Sleep -Seconds  ($cnt * 60) }
+            hour { Start-Sleep -Seconds ( $cnt * 3600 ) }
+            Default {}
+        }
+    }
+
+    function countDown {
+        foreach ($i in 10..1) {
+            Start-Sleep -Seconds 1
+            Write-Host $i
+        }
+    }
+
+    Get-Date
+    $start = (Get-Date)
+    startSleepByType $cnt $timeType
+    Start-Process F:\Material\myPhoto\jpg\time_out.jpg
+    $end = (Get-Date)
+    New-TimeSpan -End $end -Start $start | Format-Table
+    Get-Date
+
 }

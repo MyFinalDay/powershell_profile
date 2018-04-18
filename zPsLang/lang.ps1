@@ -86,3 +86,12 @@ function isVariableNull ($i) {
     # eg. isVariableNull $testVariable -> True
     $i -eq $null 
 }
+
+function camcelize {
+    $res = @()
+    foreach ($word in $args) {
+        $res += ( $word.Substring(0, 1).ToUpper() + $word.Substring(1, $word.Length - 1) )
+    }
+    $res = $res -join ''
+    $res.Substring(0, 1).ToLower() + $res.Substring(1, $res.Length - 1)
+}

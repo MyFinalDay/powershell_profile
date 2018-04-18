@@ -27,6 +27,9 @@ function handleSpeicalSymbol {
     if ($process.StartsWith('notepad')) {
         $process += '++'
     }
+    elseif ($process.StartsWith('Weather')) {
+        $process = 'Microsoft.Msn.Weather'
+    }
 
     return $process
 }
@@ -36,10 +39,23 @@ function getPsSum ($process) {
     $processWs = (logSizeHuman($processWs))
     $processWs
 }
-function getLenAll ($directory) {
-    # Get directory size eg. getLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
-    $directoryLength = (Get-ChildItem $directory -Recurse | Measure-Object -Property Length -Sum).Sum
-    logSizeHuman($directoryLength)
+function mr {
+    param(
+        [ValidateSet("LengthAll")]
+        [string]
+        $options
+    ) 
+
+    $paramArr = $args[0]
+
+    switch ($options) {
+        LengthAll {
+            # Get directory size eg. measureLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
+            $directoryLength = (Get-ChildItem $paramArr -Recurse | Measure-Object -Property Length -Sum).Sum
+            logSizeHuman($directoryLength)
+        }
+        Default {}
+    }
 }
 function convertToBinary ($i) {
     [System.Convert]::ToString($i, 2) 
@@ -207,3 +223,26 @@ public static extern int SetForegroundWindow(IntPtr point);
     # 执行命令
     [System.Windows.Forms.SendKeys]::SendWait("{Enter}")
 }
+
+# function dectect {
+#     param(
+#         [string]        
+#         $type
+#     )
+
+#     $paramArr = ($args -join '')
+
+#     switch ($type) {
+#         assertVariable { 
+#             if ($paramArr) {
+#                 Write-Host 'yes!'
+#                 $true
+#             }
+#             else {
+#                 Write-Host 'no!'
+#                 $false
+#             }
+#         }
+#         Default {}
+#     }
+# }
