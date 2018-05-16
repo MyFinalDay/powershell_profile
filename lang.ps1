@@ -6,6 +6,7 @@ function swap ($a, $b) {
     return @($a, $b)
 }
 function factorial ([int]$n = $(throw "param is not a integer!")) {
+    # factorial 5 -> 120
     $total = 1
 
     for ($i = 1; $i -le $n; $i++) {
@@ -16,7 +17,6 @@ function factorial ([int]$n = $(throw "param is not a integer!")) {
 }
 
 function logArr ([array]$array) {
-    # array to string
     for ($i = 0; $i -lt $array.Count; $i++) {
         Write-Host $array[$i]
         if ($i % 3 -eq 0) {
