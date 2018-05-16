@@ -23,5 +23,8 @@ Write-Host "`nShutdown..."
 shutdown -s -t 8
 
 
-Write-Host "Kill..."
-Stop-Process -Name powershell, ONENOTEM, ONENOTE, Code, firefox, chrome, EgretWing -ErrorAction SilentlyContinue
+Write-Host "block..."
+
+Write-Host "kill..."
+Stop-Process -Name  ONENOTEM, ONENOTE, Code, git-cmd, bash, PxCook firefox, chrome, EgretWing, wechat*, webstorm64, emacs, git-bash, ConEmu64, KanKan, FSViewer -ErrorAction SilentlyContinue
+Stop-Process -Name powershell, powershell_ise

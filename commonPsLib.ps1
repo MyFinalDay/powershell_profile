@@ -30,6 +30,21 @@ function handleSpeicalSymbol {
     elseif ($process.StartsWith('Weather')) {
         $process = 'Microsoft.Msn.Weather'
     }
+    elseif ($process.StartsWith('News')) {
+        $process = 'Microsoft.Msn.News'
+    }
+    elseif ($process.StartsWith('Photo')) {
+        $process = 'Microsoft.Photos'
+    }
+    elseif ($process.StartsWith('toolbox')) {
+        $process = 'jetbrains-toolbox'
+    }
+    elseif ($process.StartsWith('PaintStudio')) {
+        $process = 'PaintStudio.View' 
+    }
+    elseif ($process.StartsWith('Xampp')) {
+        $process = 'xampp-control'
+    }
 
     return $process
 }
@@ -122,7 +137,7 @@ function defaultLastHistory {
 
 function arroundSymbol {
     param(
-        [validateset("singleQuotes", "doubleQuotes", "parentheses", "getType", "Length", "ToString", "int32")]
+        [validateset("singleQuotes", "doubleQuotes", "parentheses", "getType", "Length", "ToString", "path", "int32")]
         $symbol,
         [string]
         $word
@@ -137,6 +152,7 @@ function arroundSymbol {
         getType { "(" + $res + ").GetType()" | clip }
         Length { "(" + $res + ").Length" | clip }
         ToString { "(" + $res + ").ToString()" | clip }
+        path { "(" + $res + ").path" | clip }
         int32 { "[int][char]('" + $res + "')" | clip }
     }
 }

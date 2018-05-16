@@ -55,7 +55,8 @@ Write-Host "`nImport Alias,History..."
 # Import-Alias E:\DataIn\SettingPowershell\alias.csv -Force
 
 Start-Sleep -Seconds 30
-Stop-Process -Name ThunderPlatform, lantern, ONENOTEM, 'Resilio Sync', jetbrains-toolbox, Xmp, QQLive, QQ* -ErrorAction SilentlyContinue
+Stop-Process -Name ThunderPlatform, lantern, ONENOTEM, 'Resilio Sync', jetbrains-toolbox, Xmp, Thunder*, knatsvc, QQLive, QQ* -ErrorAction SilentlyContinue
+
 
 
 Set-Location $HOME

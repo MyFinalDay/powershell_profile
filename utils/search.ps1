@@ -1,9 +1,9 @@
 function ns {
     # net search
     param(
-        [ValidateSet("bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType",
+        [ValidateSet("", "bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType",
             "searchBookmarksOfChrome", "github", "googleTranslate", "baiduTranslate",
-            "codepen")]
+            "bingTranslate", "codepen", "wiki", "youdaoTranslate", "quora" )]
         [string]
         $net
     ) 
@@ -11,14 +11,6 @@ function ns {
     $keyWord = $args -join " "
 
     switch ($net) {
-        googleTranslate {
-            if ([int][char]$keyWord[0] -le 255) {
-                Start-Process "https://translate.google.cn/#en/zh-CN/$keyWord"
-            }
-            else {
-                Start-Process "https://translate.google.cn/#zh-CN/en/$keyWord"
-            }
-        }
         g2 { Start-Process https://www.google.com/search?q=$keyWord }
         bk {
             if ($keyWord -ne '') {
@@ -47,13 +39,39 @@ function ns {
             ($result | Select-Object -First 1 | Select-Object url).url | clip.exe
             $result 
         }
+        googleTranslate {
+            if ([int][char]$keyWord[0] -le 255) {
+                Start-Process "https://translate.google.cn/#en/zh-CN/$keyWord"
+            }
+            else {
+                Start-Process "https://translate.google.cn/#zh-CN/en/$keyWord"
+            }
+        }
         baiduTranslate {
-            Start-Process http://fanyi.baidu.com/
+            if ([int][char]$keyWord[0] -le 255) {
+                Start-Process "http://fanyi.baidu.com/#en/zh/$keyword"
+            }
+            else {
+                Start-Process "http://fanyi.baidu.com/#zh/en/$keyword"
+            }
         }
         codepen {
             Start-Process https://codepen.io/search/pens?q=$keyWord
         }
-        Default { }
+        bingTranslate {
+            Start-Process https://cn.bing.com/translator/
+        }
+        wiki {
+            Start-Process https://en.wikipedia.org/wiki/$keyWord
+        }
+        youdaoTranslate {
+            Start-Process http://dict.youdao.com/search?q=$keyWord
+        }
+        quora {
+            Start-Process https://www.quora.com/search?q=$keyword
+        }
+
+        Default { ns bd  }
     }
 }
 function bd {
@@ -114,11 +132,50 @@ function ss {
         $contextCnt = 0,
         $isCaseSensitive = $false
     )
+
+    function logResultAndClip {
+        param(
+            $res,
+            [string]
+            $fileExtension
+        )
+
+        if ($res -ne $null) {
+            # $resFormatArr = $res | ForEach-Object { -join @($_.ToString().Split(".")[0] + ".$fileExtension" , ' ' , $_.ToString().Split(".")[1]) }
+            $resFormatArr = $res | ForEach-Object { -join @($_.Path, ' (', $_.LineNumber, ') ', $_.Line) }
+
+            Set-Content -Path E:\DataIn\PowershellScriptData\tmpCacheFile\tmpSearchResultPath.js -Value $resFormatArr -Encoding UTF8
+
+            $resFileArr = $res.Path
+            $resFile = $resFileArr | Select-Object -First 1 
+            if ($resFile.EndsWith('.js')) {
+                "pg gvim $resFile" | clip
+            }
+            else {
+                $resFile | clip
+            }
+
+            if ($res -is [array]) {
+                for ($i = 0; $i -lt $res.Count; $i++) {
+                    -join @(" $i ".PadLeft(4), " ", $res[$i])
+                }
+            }
+            else {
+                $res
+            }
+
+        }
+    }
+
     if ($isCaseSensitive) {
-        Get-ChildItem . -Include "*.$fileExtension" -Recurse | Select-String $searchPattern -CaseSensitive -Context $contextCnt
+        $res = Get-ChildItem . -Include "*.$fileExtension" -Recurse | Select-String $searchPattern -CaseSensitive -Context $contextCnt
+
+        logResultAndClip $res $fileExtension
     }
     else {
-        Get-ChildItem . -Include "*.$fileExtension"-Recurse | Select-String $searchPattern -Context $contextCnt
+        $res = Get-ChildItem . -Include "*.$fileExtension"-Recurse | Select-String $searchPattern -Context $contextCnt
+
+        logResultAndClip $res $fileExtension 
     }
 }
 

@@ -6,6 +6,7 @@
 . E:\DataIn\PowershellScriptData\utils\translate.ps1
 . E:\DataIn\PowershellScriptData\utils\quickSend163Email.ps1
 . E:\DataIn\PowershellScriptData\utils\note.ps1
+. E:\DataIn\PowershellScriptData\utils\webRequest.ps1
 
 # clip
 'ipal $myPslibFilePath.aliasFilePath -Force' | clip
@@ -32,7 +33,7 @@ enum ProgramEnum {
     powershell_ise
     Everything
     weChat
-    baiduDisk
+    baidunetdisk            
     sublime_text
 
     notepad
@@ -44,15 +45,36 @@ enum ProgramEnum {
     node
     FSViewer          
     Weather
+    Photos
+    News
+
+    SumatraPDF              
+    toolbox
+    PaintStudio
+    KanKan
+    mspaint                 
+    Explorer                
+    Thunder                 
+    QQLive                  
+    cmd
+    PxCook                  
+    Bandizip                
+    Xampp                   
+    ChsIME                  
+
+    devenv                  
+    python                  
 }
 
 # Function
 
 function he {
     help $args[0] -Examples
+    $ErrorActionPreference = "SilentlyContinue"
     if ($args[0] -match "-") {
         Get-Alias -Definition $args[0]
     }
+    $ErrorActionPreference = "Continue"
 }
 
 function getHistoryMatchChinese() {
@@ -92,13 +114,6 @@ function lastPS {
     }, @{Label = "  Total Running time  "; Expression = {((Get-Date) - $_.StartTime).ToString().Split(".")[0]}; alignment = "center"; }, MainWindowTitle
     $ErrorActionPreference = "Continue"
 }
-function killLastPS($i) {
-    # Stop-Process eg. killLastPS powershell -> kill the last start-up powershell 
-    $ErrorActionPreference = "SilentlyContinue"
-    Get-Process $i | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process 
-    $ErrorActionPreference = "Continue"
-}
-
 function killLastPS_quick {
     # Stop-Process(only some special process use killLastPS for normal) eg. killPS powershell -> kill the last start-up powershell 
     param(
@@ -108,7 +123,12 @@ function killLastPS_quick {
     $process = handleSpeicalSymbol $pg
 
     $ErrorActionPreference = "SilentlyContinue"
-    Get-Process $process | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process 
+    if ($process.ToLower() -eq 'explorer') {
+        Get-Process $process | Where-Object {$_.MainWindowTitle -ne ''} | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process
+    }
+    else {
+        Get-Process $process | Sort-Object StartTime -Descending | Select-Object -First 1 | Stop-Process 
+    }
     $ErrorActionPreference = "Continue"
 }
 function lastPS_notContainMs () {
@@ -676,23 +696,28 @@ function sll {
     param(
         [string]
         $location,
-        [ValidateSet("e", "g", "b", "s", "md", "ni", "np", "st", "slf")]
+        [ValidateSet("e", "g", "b", "s", "md", "ni",
+            "np", "st", "slf", "groupExtension", "path",
+            "saveCurrentPath")]
         [string]
         $openType
     ) 
 
     Set-Location $location
     $cnt = (Get-ChildItem | Measure-Object).Count
+    $fileCnt = (Get-ChildItem -File | Measure-Object).Count
+    $directoryCnt = (Get-ChildItem -Directory | Measure-Object).Count
     if ($cnt -gt 53) {
         Get-ChildItemColor | Sort-Object LastAccessTime -Descending | more
-        $cnt
+        Write-Host ''
+        @($fileCnt, $directoryCnt, $cnt) -join '/'
     }
     else {
-        Get-ChildItemColor | Sort-Object LastAccessTime -Descending
-        $cnt
+        Get-ChildItem | Sort-Object LastAccessTime -Descending | Get-ChildItemColor
+        Write-Host ''
+        @($fileCnt, $directoryCnt, $cnt) -join '/'
     }
 
-    saveCurrentPath
 
     $fileName = ( Get-ChildItem -File . | Sort-Object Length | Select-Object -First 1 ).fullname
 
@@ -721,6 +746,15 @@ function sll {
         'st' { openFile([ProgramEnum]"sublime_text") }
 
         'slf' { slf }
+        'groupExtension' {
+            Get-ChildItem | Group-Object Extension | Sort-Object Count -Descending | Format-Table -Wrap
+        }
+        'path' {
+            zs path
+        }
+        'saveCurrentPath' {
+            saveCurrentPath
+        }
         Default {}
     }
 }
@@ -776,12 +810,15 @@ function xm () {
 
 function zs {
     param(
-        [ValidateSet("path", "reNamePinyin_quick", "reNamePinyin_recuresDeepPath2")]
+        [ValidateSet("path", "reNamePinyin_quick", "reNamePinyin_recuresDeepPath2",
+            "gTools", "eazydict", "testJs", "reStart", "searchResultPath", "phone")]
         [string]
         $type
     )
 
-    $paramArr = ($args -join '')
+    $paramStr = ($args -join '')
+    $paramStrWithBlank = ($args -join ' ')
+    $paramArr = $args
 
     switch ($type) {
         path { 
@@ -792,13 +829,38 @@ function zs {
         }
 
         reNamePinyin_quick {
-            $item = ( Get-ChildItem $paramArr )
+            $item = ( Get-ChildItem $paramStr )
             $item | ForEach-Object { reNameWithPinying -item $_ -firstAlpha ( chineseToPinyin $_.ToString().Substring(0, 2) ) }
         }
 
         reNamePinyin_recuresDeepPath2 {
-            $item = (Get-ChildItem -Recurse $paramArr)
+            $item = (Get-ChildItem -Recurse $paramStr)
             $item | ForEach-Object { reNameWithPinying -item $_ -firstAlpha ( chineseToPinyin $_.ToString().Substring(0, 2) ) }
+        }
+
+        gTools {
+            pg gvim E:\DataIn\MyNote\tool_key.js
+        }
+
+        testJs {
+            pg gvim E:\DataIn\VScodeData\quickUtils\js\all_test_all.js
+        }
+        eazydict {
+            SimpleTranslate $paramStrWithBlank
+            eazydict.cmd $paramArr
+        }
+
+        reStart {
+            Stop-Process -Name $paramStr
+            pg $paramStr
+        }
+
+        searchResultPath {
+            pg gvim E:\DataIn\PowershellScriptData\tmpCacheFile\tmpSearchResultPath.js
+        }
+
+        phone {
+            $Global:MyMsg.phone | clip
         }
         Default {}
     }
@@ -840,8 +902,24 @@ function timeReminding {
     $start = (Get-Date)
     startSleepByType $cnt $timeType
     Start-Process F:\Material\myPhoto\jpg\time_out.jpg
+    # Taskmgr.exe
     $end = (Get-Date)
     New-TimeSpan -End $end -Start $start | Format-Table
     Get-Date
 
+}
+
+function activeAdministator {
+    'net user administrator /active:yes' | clip
+}
+
+function repeatCall {
+    param(
+        [string]
+        $str,
+        [int]
+        $cnt = 3
+    )
+
+    1..$cnt | ForEach-Object { Invoke-Expression $str }
 }

@@ -51,7 +51,7 @@ function SimpleTranslate {
     bdTranslate $res
     Write-Host " "
 }
-function bdTranslateAntNote {
+function bdTranslateAndNote {
     # translate, clip, note
     Write-Host " "
     $word = ($args -join " ")
