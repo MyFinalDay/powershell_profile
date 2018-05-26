@@ -69,6 +69,7 @@ enum ProgramEnum {
 # Function
 
 function he {
+    # Examples and Alias
     help $args[0] -Examples
     $ErrorActionPreference = "SilentlyContinue"
     if ($args[0] -match "-") {
