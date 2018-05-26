@@ -20,11 +20,12 @@ Set-Content E:\DataIn\SettingPowershell\tmpShudownInfo.txt ([datetime]::Now)
 . E:\DataIn\PowershellScriptData\utils\sendMsglog.ps1
 
 Write-Host "`nShutdown..."
-shutdown -s -t 8
 
 
-Write-Host "block..."
 
 Write-Host "kill..."
-Stop-Process -Name  ONENOTEM, ONENOTE, Code, git-cmd, bash, PxCook firefox, chrome, EgretWing, wechat*, webstorm64, emacs, git-bash, ConEmu64, KanKan, FSViewer -ErrorAction SilentlyContinue
+Stop-Process -Name ONENOTEM, rider64 ONENOTE, Code, git-cmd, bash, PxCook firefox, chrome, EgretWing, wechat*, webstorm64, emacs, git-bash, ConEmu64, KanKan, FSViewer -ErrorAction SilentlyContinue
+
+shutdown.exe -s -t 8
+start-Sleep -Seconds 7
 Stop-Process -Name powershell, powershell_ise

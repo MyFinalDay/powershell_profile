@@ -1,1 +1,1 @@
-﻿E:\DataIn\MyNote\think思考.js (40)             "观察": ["列举特性,要素", "正面侧面", "外在内在", "划分变化阶段"],
+﻿E:\DataIn\PowershellScriptData\commonPsLib.ps1 (57) function mr {

@@ -56,7 +56,7 @@ function getPsSum ($process) {
 }
 function mr {
     param(
-        [ValidateSet("LengthAll")]
+        [ValidateSet("LengthAll", "TimeSpanLtOneDay", "TimeSpanUpToNow")]
         [string]
         $options
     ) 
@@ -68,6 +68,22 @@ function mr {
             # Get directory size eg. measureLenAll $HOME/Desktop/jsFile -> Get jsFile/ size
             $directoryLength = (Get-ChildItem $paramArr -Recurse | Measure-Object -Property Length -Sum).Sum
             logSizeHuman($directoryLength)
+        }
+        TimeSpanLtOneDay {
+            $end = [string]::Concat([datetime]::Now.ToString('d'), ' ', $args[0])
+            $start = [string]::Concat([datetime]::Now.ToString('d'), ' ', $args[1])
+            if ($end -lt $start) {
+                $start, $end = $end, $start
+            }
+            New-TimeSpan -End $end -Start $start | Format-Table
+        }
+        TimeSpanUpToNow {
+            $end = [string]::Concat([datetime]::Now.ToString('d'), ' ', $args[0])
+            $start = [datetime]::Now.ToString()
+            if ( $end -lt [datetime]::Parse($start) ) {
+                $start, $end = $end, $start
+            }
+            New-TimeSpan -End $end -Start $start | Format-Table
         }
         Default {}
     }

@@ -32,7 +32,7 @@ enum ProgramEnum {
     IDEA
     powershell_ise
     Everything
-    weChat
+    WeChat
     baidunetdisk            
     sublime_text
 
@@ -64,6 +64,10 @@ enum ProgramEnum {
 
     devenv                  
     python                  
+    rider64
+    pycharm64           
+    MicrosoftEdge           
+    mip                     
 }
 
 # Function
@@ -89,6 +93,10 @@ function wsAll {
     )
 
     $process = handleSpeicalSymbol $pg
+    # $pgStr = [System.Enum]::GetName([ProgramEnum], [ProgramEnum]$pg)
+    # $pgStr
+    # $pgEnum = [System.Enum]::Parse([ProgramEnum], "qq")
+    # $pgEnum.GetType()
 
     $processWs = getPsSum($process)
     $processWs
@@ -736,7 +744,7 @@ function sll {
         'g' { pg gvim }
 
         'b' { quickStartGitBash }
-        's' { Get-ChildItemColor | Sort-Object lastAccessDirectory -Descending | Select-Object -First 3 }
+        's' { Get-ChildItemColor | Sort-Object LastAccessTime -Descending | Select-Object -First 3 }
 
         'md' { New-Item -ItemType Directory -Name (genRandomStr) }
         'ni' { New-Item -ItemType File -Name (genRandomStr) }
@@ -811,7 +819,8 @@ function xm () {
 function zs {
     param(
         [ValidateSet("path", "reNamePinyin_quick", "reNamePinyin_recuresDeepPath2",
-            "gTools", "eazydict", "testJs", "reStart", "searchResultPath", "phone")]
+            "gTools", "eazydict", "testJs", "reStart", "searchResultPath", "phone",
+            "tapd")]
         [string]
         $type
     )
@@ -861,6 +870,13 @@ function zs {
 
         phone {
             $Global:MyMsg.phone | clip
+        }
+
+        tapd {
+            Start-Process https://www.tapd.cn/my_worktable?left_tree=1
+            $url = "https://www.tapd.cn/worktable_ajax/get_top_nav_worktable_data?t=0.3755283616519416"
+            Start-Sleep -Seconds 1 
+            Start-Process $url
         }
         Default {}
     }

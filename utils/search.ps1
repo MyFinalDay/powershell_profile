@@ -3,12 +3,17 @@ function ns {
     param(
         [ValidateSet("", "bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType",
             "searchBookmarksOfChrome", "github", "googleTranslate", "baiduTranslate",
-            "bingTranslate", "codepen", "wiki", "youdaoTranslate", "quora" )]
+            "bingTranslate", "codepen", "wiki", "youdaoTranslate", "quora", "serverfault",
+            "stackexchange" )]
         [string]
         $net
     ) 
 
     $keyWord = $args -join " "
+    if (![string]::IsNullOrEmpty($keyWord)) {
+        # $keyWord = [System.Web.HttpUtility]::UrlEncode($keyWord) ( is Error !)
+        $keyWord = [uri]::EscapeDataString($keyWord)
+    }
 
     switch ($net) {
         g2 { Start-Process https://www.google.com/search?q=$keyWord }
@@ -70,6 +75,12 @@ function ns {
         quora {
             Start-Process https://www.quora.com/search?q=$keyword
         }
+        serverfault {
+            Start-Process https://serverfault.com/search?q=$keyWord
+        }
+        stackexchange {
+            Start-Process https://stackexchange.com/search?q=$keyWord
+        }
 
         Default { ns bd  }
     }
@@ -77,6 +88,11 @@ function ns {
 function bd {
     # eg. bd powershellAPI -> baidu.com search powershellAPI
     $keyWord = ($args -join " ")
+    if (![string]::IsNullOrEmpty($keyWord)) {
+        # $keyWord = [System.Web.HttpUtility]::UrlEncode($keyWord) ( is Error !)
+        $keyWord = [uri]::EscapeDataString($keyWord)
+    }
+
 
     if ($keyWord -ne '') {
         Start-Process https://www.baidu.com/s?wd=$keyWord
@@ -88,7 +104,9 @@ function bd {
 function searchBookmarksOfChrome {
     param(
         [string]
-        $keyWord
+        $keyWord,
+        [int]
+        $Index = 1
     ) 
 
     $keyWord = $keyWord.ToLower()
@@ -97,6 +115,11 @@ function searchBookmarksOfChrome {
 
     ($result | Select-Object -First 1 | Select-Object url).url | clip.exe
     $result 
+
+    if ($Index -ne 1) {
+        $Index -= 1
+        ($result | Select-Object -Index $Index | Select-Object url).url | clip.exe
+    }
 }
 function searchDuplicateFile() {
     begin {

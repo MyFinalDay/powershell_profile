@@ -1,14 +1,35 @@
 # ******************************************************************************** 
-# some variables
-# ******************************************************************************** 
-$dateArr = @((Get-Date), (Get-Date).DayOfWeek)
-$dateArr -join '  '
-
-# -join ((Get-Date), '  ', (Get-Date).DayOfWeek)
-
-# ******************************************************************************** 
 # some function
 # ******************************************************************************** 
+
+function  DegreeColorMap {
+    param(
+        [double]$percent
+    ) 
+
+    switch ($percent) {
+        { $_ -le 20 } {
+            [System.ConsoleColor]'White'
+        }
+        { $_ -gt 20 -and $_ -le 40 } {
+            [System.ConsoleColor]'DarkGreen'
+        }
+        { $_ -gt 40 -and $_ -le 60 } {
+            [System.ConsoleColor]'Green'
+        }
+        { $_ -gt 60 -and $_ -le 80 } {
+            [System.ConsoleColor]'Blue'
+        }
+        { $_ -gt 80 -and $_ -le 100 } {
+            [System.ConsoleColor]'DarkBlue'
+        }
+        Default {
+            # [System.ConsoleColor]'White'
+        }
+    }
+}
+    
+
 function getSortedPS {
     $result = (Get-Process | Sort-Object WorkingSet -Descending |
             Select-Object -First $args[0] |
@@ -188,6 +209,29 @@ function logWs {
 
     $logObj 
 }
+# ******************************************************************************** 
+# some variables
+# ******************************************************************************** 
+# $dateArr = @((date), (Get-Date).DayOfWeek)
+# $dateArr -join '  '
+# -join ((Get-Date), '  ', (Get-Date).DayOfWeek)
+
+$MultipleCnt = 100
+$TotalDaysOfCurrentYear = 365
+if ([datetime]::IsLeapYear([datetime]::Now.Year)) {
+    $TotalDaysOfCurrentYear = 366
+}
+$DayOfYearPercent = [datetime]::Now.DayOfYear / $TotalDaysOfCurrentYear * $MultipleCnt
+$TimeOfDayPercent = ([datetime]::Now.Hour + [datetime]::Now.Minute / 60) / 24 * $MultipleCnt
+$SplitSymbol = '.';
+
+[datetime]::Now.ToString('yyyy-MM-dd HH:mm:ss ddd')
+Write-Host ''
+Write-Host ($SplitSymbol * $DayOfYearPercent) -ForegroundColor (DegreeColorMap $DayOfYearPercent)
+Write-Host ($SplitSymbol * $TimeOfDayPercent) -ForegroundColor (DegreeColorMap $TimeOfDayPercent)
+Write-Host ($SplitSymbol * $MultipleCnt) -ForegroundColor DarkGray
+
+Write-Host ''
 
 # ******************************************************************************** 
 # some test

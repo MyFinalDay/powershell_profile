@@ -37,14 +37,34 @@ function bdTranslate {
     $rsp.trans_result[0].dst
 }
 function SimpleTranslate {
+    $MaxCacheLineCnt = 40
+    $TmpTranslateFilePath = 'E:\DataIn\PowershellScriptData\tmpCacheFile\tmpTranslate.js'
+    $OutOfCachePromptTxt = "`ntmp cached more than $MaxCacheLineCnt!`n"
+    
     Write-Host " "
     $word = ($args -join " ")
     $res = bdTranslate $word
     if ([int[]][char[]]$word -ge 255) {
         $res | clip
+        if ((Get-ChildItem $TmpTranslateFilePath| Select-String $res) -eq $null) {
+            if ((Get-Content $TmpTranslateFilePath| Measure-Object).Count -lt $MaxCacheLineCnt) {
+                addEnglishWords @($res, $word) $TmpTranslateFilePath
+            }
+            else {
+                Write-Host $OutOfCachePromptTxt
+            }
+        }
     }
     else {
         $word | clip  
+        if ((Get-ChildItem $TmpTranslateFilePath| Select-String $word) -eq $null) {
+            if ((Get-Content $TmpTranslateFilePath| Measure-Object).Count -lt $MaxCacheLineCnt) {
+                addEnglishWords @($word, $res) $TmpTranslateFilePath
+            }
+            else {
+                Write-Host $OutOfCachePromptTxt
+            }
+        }
     }
     Write-Host "`t $res"
     Write-Host " "

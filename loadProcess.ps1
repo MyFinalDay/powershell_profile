@@ -39,7 +39,7 @@ Start-Sleep -Seconds 2
 
 Write-Host "Open...".PadLeft(20)
 # Invoke-Expression $oneNote
-Invoke-Expression $wox
+# Invoke-Expression $wox
 
 Invoke-Expression $cmder
 Invoke-Expression $emacs
