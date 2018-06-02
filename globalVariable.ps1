@@ -23,13 +23,15 @@ $Global:myPslibFilePath = @{
 }
 
 $Global:WebNetUrlUsual = @{
-    stackedit         = 'https://stackedit.io/'
-    myGithub          = 'https://myfinalday.github.io/'
-    freeLicenseServer = 'http://jetbrains.license.laucyun.com/'
-    xiaoChengXu       = 'https://developers.weixin.qq.com/miniprogram/dev/api/'
-    antMobile         = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
-    antDesign         = 'http://ant-design.gitee.io/docs/react/introduce-cn'
-    dva               = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
+    stackedit   = 'https://stackedit.io/'
+    myGithub    = 'https://myfinalday.github.io/'
+    freeLicense = 'http://jetbrains.license.laucyun.com/'
+    xiaoChengXu = 'https://developers.weixin.qq.com/miniprogram/dev/api/'
+    antMobile   = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
+    antDesign   = 'http://ant-design.gitee.io/docs/react/introduce-cn'
+    dva         = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
+    iconfont    = 'http://www.iconfont.cn/search/index'
+
 }
 
 $Global:myWorkPathHash = @{
@@ -64,8 +66,13 @@ $Global:myWorkPathHash = @{
     rider64Data         = 'E:\DataIn\RiderData\newTestSmallCode\Solution1\ConsoleApplication1\bin\Debug'
     rider64EXEData      = 'E:\DataIn\RiderData\newTestSmallCode\Solution1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe'
     consultantMobile    = 'E:\DataIn\WorkFor\customerManage\consultantMobile'
-    customerYX          = 'https://free.modao.cc/app/4z8fpIEPJTlYdqm8XcPU9j6vAOVGRP3#screen=sA79478420D1524817302322'
+    consultantYX        = 'https://free.modao.cc/app/4z8fpIEPJTlYdqm8XcPU9j6vAOVGRP3#screen=sA79478420D1524817302322'
     testLayout          = 'file:///E:/DataIn/vscodedata/newtestlayout/index.html'
+
+    gitTmpCanBeDel      = 'E:\DataIn\GitHub_download_data\tmp_canDelete'
+    qichangDomain       = "https://bbwy.lwf.gzqichang.com/"
+
+    tmp_canDelete       = 'E:\DataIn\GitHub_download_data\tmp_canDelete'
 }
 
 $Global:programPathHash = @{
@@ -126,6 +133,7 @@ $Global:programPathHash = @{
     'xampp-control'         = 'E:\UserSoft\Xampp\xampp-control.exe'
     devenv                  = 'E:\UserSoft\VisulStuido\Common7\IDE\devenv.exe'
     python                  = 'C:\Python36\python.exe'
+    WXWork                  = 'E:\UserSoft\WXWork\WXWork.exe';
 }
 
 $Global:myUtilPath = @{

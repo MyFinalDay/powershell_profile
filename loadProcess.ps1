@@ -35,7 +35,7 @@ $Global:startLoadTimeAllProcess = Get-Process
 # some cmdlet
 # ******************************************************************************** 
 
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 
 Write-Host "Open...".PadLeft(20)
 # Invoke-Expression $oneNote

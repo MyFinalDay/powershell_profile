@@ -15,6 +15,7 @@ Write-Host "`nExport Alias, History..."
 #     Get-History | Export-Csv E:\DataIn\SettingPowershell\history.csv
 # }
 
+
 Set-Content E:\DataIn\SettingPowershell\tmpShudownInfo.txt ([datetime]::Now)
 
 . E:\DataIn\PowershellScriptData\utils\sendMsglog.ps1
@@ -24,7 +25,7 @@ Write-Host "`nShutdown..."
 
 
 Write-Host "kill..."
-Stop-Process -Name ONENOTEM, rider64 ONENOTE, Code, git-cmd, bash, PxCook firefox, chrome, EgretWing, wechat*, webstorm64, emacs, git-bash, ConEmu64, KanKan, FSViewer -ErrorAction SilentlyContinue
+Stop-Process -Name ONENOTEM, rider64, ConEmuC64, ONENOTE, Code, git-cmd, bash, PxCook, firefox, chrome, EgretWing, wechat*, webstorm64, emacs, git-bash, ConEmu64, KanKan, FSViewer -ErrorAction SilentlyContinue
 
 shutdown.exe -s -t 8
 start-Sleep -Seconds 7

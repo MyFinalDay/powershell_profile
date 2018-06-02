@@ -68,6 +68,7 @@ enum ProgramEnum {
     pycharm64           
     MicrosoftEdge           
     mip                     
+    WXWork                  
 }
 
 # Function
@@ -169,7 +170,14 @@ function cl() {
     $fileCount = (Get-ChildItem -File .. | Measure-Object).Count
     $lastAccessTimeFile = (Get-ChildItem -File .. | Sort-Object LastAccessTime -Descending | Select-Object -First 1)
     $lastAccessTimeDirectory = (Get-ChildItem -Directory .. | Sort-Object LastAccessTime -Descending | Select-Object -First 1)
-    Set-Location .. ; Get-ChildItem
+
+    Set-Location ..
+    if ($fileCount -gt 53 -or $directoryCount -gt 53) {
+        Get-ChildItemColor | Sort-Object LastAccessTime -Descending | more
+    }
+    else {
+        Get-ChildItemColor
+    }
 
 
     $logObj = New-Object object
@@ -190,7 +198,14 @@ function ccl () {
     $fileCount = (Get-ChildItem -File ../.. | Measure-Object).Count
     $lastAccessTimeFile = (Get-ChildItem -File ../.. | Sort-Object LastAccessTime -Descending | Select-Object -First 1)
     $lastAccessTimeDirectory = (Get-ChildItem -Directory ../.. | Sort-Object LastAccessTime -Descending | Select-Object -First 1)
-    Set-Location ../.. ; Get-ChildItem
+
+    Set-Location ../.. 
+    if ($fileCount -gt 53 -or $directoryCount -gt 53) {
+        Get-ChildItemColor | Sort-Object LastAccessTime -Descending | more
+    }
+    else {
+        Get-ChildItemColor
+    }
 
 
     $logObj = New-Object object
@@ -922,8 +937,8 @@ function timeReminding {
     $end = (Get-Date)
     New-TimeSpan -End $end -Start $start | Format-Table
     Get-Date
-
 }
+
 
 function activeAdministator {
     'net user administrator /active:yes' | clip
@@ -938,4 +953,18 @@ function repeatCall {
     )
 
     1..$cnt | ForEach-Object { Invoke-Expression $str }
+}
+
+function zCleanCachedAndKillNode {
+    Stop-Process -Name node 
+    $cachedFilePath = 'E:\DataIn\GitHub_download_data\tmp_canDelete\customerManage\customerManage\consultantMobile\node_modules\.cache\hard-source\c2bbfd8a6837afce70dca80816cdacbb484165dd4ed0cb6e8a1d6536afa51cc9'
+
+    Remove-Item -Recurse $cachedFilePath
+}
+
+function zWorkCleanCachedAndKillNode {
+    Stop-Process -Name node 
+    $cachedFilePath = 'E:\DataIn\WorkFor\customerManage\consultantMobile\node_modules\.cache\hard-source\a46b2c3f7582d91717f14d4898282db2a8c6f33499ff80145e10b7a50c53e255'
+
+    Remove-Item -Recurse $cachedFilePath
 }

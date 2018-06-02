@@ -4,7 +4,7 @@ function ns {
         [ValidateSet("", "bd", "g2", "bk", "segmentfault", "stackoverflow", "bd_FileType",
             "searchBookmarksOfChrome", "github", "googleTranslate", "baiduTranslate",
             "bingTranslate", "codepen", "wiki", "youdaoTranslate", "quora", "serverfault",
-            "stackexchange" )]
+            "zstackexchange", "iconfont" )]
         [string]
         $net
     ) 
@@ -78,8 +78,11 @@ function ns {
         serverfault {
             Start-Process https://serverfault.com/search?q=$keyWord
         }
-        stackexchange {
+        zstackexchange {
             Start-Process https://stackexchange.com/search?q=$keyWord
+        }
+        iconfont {
+            Start-Process http://www.iconfont.cn/search/index?q=$keyword
         }
 
         Default { ns bd  }

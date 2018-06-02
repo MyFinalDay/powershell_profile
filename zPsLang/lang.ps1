@@ -69,6 +69,7 @@ function insertSort {
 }
 
 function enumeratorProperty($obj) {
+    $obj.GetType().BaseType.Name
     $obj | Select-Object ($obj | Get-Member -MemberType Property | Select-Object Name).Name
 }
 function hashTableConvertToObject {

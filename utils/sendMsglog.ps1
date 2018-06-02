@@ -56,6 +56,10 @@ $intPtr = $Console.MainWindowHandle
 
 [System.Windows.Forms.SendKeys]::SendWait("{Enter}")
 
+[System.Windows.Forms.SendKeys]::SendWait("zWorkCleanCachedAndKillNode")
+
+[System.Windows.Forms.SendKeys]::SendWait("{Enter}")
+
 Start-Sleep -Seconds 5
 
 #[System.Windows.Forms.SendKeys]::SendWait("E:\DataIn\PowershellScriptData\test\testClassPoint.ps1")
