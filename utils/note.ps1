@@ -15,7 +15,7 @@ function addEnglishWords {
         $fileFullPath = 'E:\DataIn\MyNote\tmpEnglish.js'
     )
     Add-Content -Path $fileFullPath -Value ('"' + $noteArr[0] + '"' + ': ' + '"' + $noteArr[1] + '",') -Encoding UTF8
-    Get-Content -Path $fileFullPath | more
+    Get-Content -Path $fileFullPath | Select-Object -Last 12
 }
 
 function updateFileContent {

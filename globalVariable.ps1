@@ -23,15 +23,15 @@ $Global:myPslibFilePath = @{
 }
 
 $Global:WebNetUrlUsual = @{
-    stackedit   = 'https://stackedit.io/'
-    myGithub    = 'https://myfinalday.github.io/'
-    freeLicense = 'http://jetbrains.license.laucyun.com/'
-    xiaoChengXu = 'https://developers.weixin.qq.com/miniprogram/dev/api/'
-    antMobile   = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
-    antDesign   = 'http://ant-design.gitee.io/docs/react/introduce-cn'
-    dva         = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
-    iconfont    = 'http://www.iconfont.cn/search/index'
-
+    stackedit    = 'https://stackedit.io/'
+    myGithub     = 'https://myfinalday.github.io/'
+    freeLicense  = 'http://jetbrains.license.laucyun.com/'
+    xiaoChengXu  = 'https://developers.weixin.qq.com/miniprogram/dev/api/'
+    antMobile    = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
+    antDesign    = 'http://ant-design.gitee.io/docs/react/introduce-cn'
+    dva          = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
+    iconfont     = 'http://www.iconfont.cn/search/index'
+    webstormHelp = 'https://www.jetbrains.com/help/webstorm/2017.3/meet-webstorm.html'
 }
 
 $Global:myWorkPathHash = @{
@@ -73,6 +73,7 @@ $Global:myWorkPathHash = @{
     qichangDomain       = "https://bbwy.lwf.gzqichang.com/"
 
     tmp_canDelete       = 'E:\DataIn\GitHub_download_data\tmp_canDelete'
+    rollupTest          = 'E:\DataIn\VScodeData\quickUtils\rollupTest'
 }
 
 $Global:programPathHash = @{
@@ -155,3 +156,44 @@ $Global:myMsg = @{
 }
 
 $Global:yx = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx/bbwy_yx_0314/start.html'
+
+$Global:apiGitHub = @{
+    api                                  = 'https://api.github.com/'
+    current_user_url                     = 'https://api.github.com/user'
+    current_user_authorizations_html_url = 'https://github.com/settings/connections/applications{/client_id}'
+    authorizations_url                   = 'https://api.github.com/authorizations'
+    code_search_url                      = 'https://api.github.com/search/code?q={query}{&page,per_page,sort,order}'
+    commit_search_url                    = 'https://api.github.com/search/commits?q={query}{&page,per_page,sort,order}'
+    emails_url                           = 'https://api.github.com/user/emails'
+
+    emojis_url                           = 'https://api.github.com/emojis'  # emoj
+    events_url                           = 'https://api.github.com/events'  # longResponse
+
+    feeds_url                            = 'https://api.github.com/feeds'
+    followers_url                        = 'https://api.github.com/user/followers'
+    following_url                        = 'https://api.github.com/user/following{/target}'
+    gists_url                            = 'https://api.github.com/gists{/gist_id}'
+    hub_url                              = 'https://api.github.com/hub'
+    issue_search_url                     = 'https://api.github.com/search/issues?q={query}{&page,per_page,sort,order}'  #longResponse
+
+    issues_url                           = 'https://api.github.com/issues'
+
+    keys_url                             = 'https://api.github.com/user/keys'
+    notifications_url                    = 'https://api.github.com/notifications'
+    public_gists_url                     = 'https://api.github.com/gists/public'  #longResponse
+    rate_limit_url                       = 'https://api.github.com/rate_limit'  # shortResponse 
+    repository_url                       = 'https://api.github.com/repos/{owner}/{repo}'
+    repository_search_url                = 'https://api.github.com/search/repositories?q={query}{&page,per_page,sort,order}'  # longResponse
+    
+    current_user_repositories_url        = 'https://api.github.com/user/repos{?type,page,per_page,sort}'
+    starred_url                          = 'https://api.github.com/user/starred{/owner}{/repo}'
+    starred_gists_url                    = 'https://api.github.com/gists/starred'
+    team_url                             = 'https://api.github.com/teams'
+    user_url                             = 'https://api.github.com/users/{user}'
+    user_organizations_url               = 'https://api.github.com/user/orgs'
+    user_repositories_url                = 'https://api.github.com/users/{user}/repos{?type,page,per_page,sort}'
+    user_search_url                      = 'https://api.github.com/search/users?q={query}{&page,per_page,sort,order}'
+
+    gist_detail_eg1                      = 'https://api.github.com/gists/09591a0e01c7c380afdfedea3e76c501'
+    developerV3                          = 'https://developer.github.com/v3/repos/'
+}

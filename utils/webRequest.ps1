@@ -1,9 +1,11 @@
 function webRequest {
     param(
         [string]
-        $url
+        $url = 'https://api.github.com/'
     )
     # "http://lvpai.gznuode.cn/api/v1/user/list"
+    # https://api.github.com/
+    # https://api.github.com/emojis
 
     # $resData = (ConvertFrom-Json ( Invoke-WebRequest -Uri $url ).content).data
     $resRawData = Invoke-WebRequest -Uri $url
