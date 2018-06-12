@@ -37,7 +37,7 @@ function bdTranslate {
     $rsp.trans_result[0].dst
 }
 function SimpleTranslate {
-    $MaxCacheLineCnt = 60
+    $MaxCacheLineCnt = 160
     $TmpTranslateFilePath = 'E:\DataIn\PowershellScriptData\tmpCacheFile\tmpTranslate.js'
     $OutOfCachePromptTxt = "`ntmp cached more than $MaxCacheLineCnt!`n"
     

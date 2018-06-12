@@ -961,8 +961,8 @@ function zWorkCleanCachedAndKillNode {
     # danger
     $ErrorActionPreference = "SilentlyContinue"
         
-    $PgNodeCnt = (Get-Process | Measure-Object).Count
-    if ($PgNodeCnt -ne 0) {
+    $ProgramNodeCnt = (Get-Process | Measure-Object).Count
+    if ($ProgramNodeCnt -ne 0) {
         Stop-Process -Name node 
         $cachedFilePath = 'E:\DataIn\WorkFor\customerManage\consultantMobile\node_modules\.cache\hard-source\a46b2c3f7582d91717f14d4898282db2a8c6f33499ff80145e10b7a50c53e255'
 
@@ -977,4 +977,13 @@ function zWorkCleanCachedAndKillNode {
 
 function ToNegitiveNum ($param1 = $(Throw "param 1 must be specified!")) {
     0 - [System.Convert]::ToInt32($param1)
+}
+
+function replaceBackslashToSlash {
+    # replace \ to /
+    param(
+        [string]$i
+    )
+
+    $i.ToString().Replace("\", "/")
 }

@@ -151,7 +151,7 @@ function defaultLastHistory {
     return $res
 }
 
-function arroundSymbol {
+function surroundSymbol {
     param(
         [validateset("singleQuotes", "doubleQuotes", "parentheses", "getType", "Length", "ToString", "path", "int32")]
         $symbol,

@@ -3,9 +3,6 @@ $Global:myStr1 = @"
  |\ ^&_-+=$,;\)@~%`][<. ;:}{*!T>/o01OIl'
 "@
 
-$Global:usualPsArr = @("explorer", "gvim", "node", "firefox", "chrome", "powershell", "qq*", "Code", "atom",
-    "wechatdevtools", "mongobooster", "emacs", "EgretWing", "Postman", "powershell_ise")
-
 $Global:sysToolsArr = @(
     "winver"       , "mspaint"      , "magnify"  ,
     "charmap"      , "msinfo32"     , "resmon"   ,
@@ -14,8 +11,6 @@ $Global:sysToolsArr = @(
     "firewall.cpl" , "main.cpl"     , "ncpa.cpl" ,
     "sysdm.cpl"    , "timedate.cpl" , "eventvwr"
 )
-
-$Global:myHash1 = @{level = 1; scope = "root"; isGlobal = $true; lang = @('powershell', 'C#')}
 
 $Global:myPslibFilePath = @{
     psLibFilePath = 'E:\DataIn\PowershellScriptData\psLib.ps1';
@@ -26,19 +21,24 @@ $Global:WebNetUrlUsual = @{
     stackedit    = 'https://stackedit.io/'
     myGithub     = 'https://myfinalday.github.io/'
     freeLicense  = 'http://jetbrains.license.laucyun.com/'
-    xiaoChengXu  = 'https://developers.weixin.qq.com/miniprogram/dev/api/'
-    antMobile    = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
-    antDesign    = 'http://ant-design.gitee.io/docs/react/introduce-cn'
-    dva          = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
     iconfont     = 'http://www.iconfont.cn/search/index'
     webstormHelp = 'https://www.jetbrains.com/help/webstorm/2017.3/meet-webstorm.html'
+}
+
+$Global:documentNetUrl = @{
+    vue         = 'https://cn.vuejs.org/v2/api/'
+    xiaoChengXu = 'https://developers.weixin.qq.com/miniprogram/dev/api/'
+    antMobile   = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
+    antDesign   = 'http://ant-design.gitee.io/docs/react/introduce-cn'
+    dva         = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
 }
 
 $Global:myWorkPathHash = @{
     appJs               = 'E:\DataIn\NodejsData\testWebpack\testSmall\src\'
     weChatTmpFile       = 'C:\Users\mydell\Documents\WeChat Files\wxid_fodh1nkdqos422\Files'
-    emacsRecentFile     = 'E:\UserSoft\Ecmas\emacs\bin\RecentFlie'
+    emacsRecentFile     = 'E:\UserSoft\Ecmas\emacs-26.1-x86_64\RecentFlie'
     forQuickTest        = 'E:\DataIn\VScodeData\forQuickTest'
+    payloadFormat       = 'E:\DataIn\PowershellScriptData\tmpCacheFile\tmpSomePayloadFormat.js'
 
     tutorPlatform       = 'E:\DataIn\WorkFor\tutorPlatform\client\admin\src\components\backend'
     yjxy_wxapp          = 'E:\DataIn\WorkFor\yjxy-wxapp\admin\src\components'
@@ -102,7 +102,7 @@ $Global:programPathHash = @{
     IDEA                    = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\JetBrains Toolbox\IntelliJ IDEA Ultimate.lnk'
     rider64                 = 'C:\Users\mydell\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\181.4379.1191\bin\rider64.exe'
     Postman                 = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Postman\Postman.lnk'
-    emacs                   = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Gnu Emacs\Emacs.lnk'
+    emacs                   = 'E:\UserSoft\Ecmas\emacs-26.1-x86_64\bin\runemacs.exe'
     powershell_ise          = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell ISE.lnk'
     Everyting               = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Everything\Search Everything.lnk'
     baidunetdisk            = 'C:\Users\mydell\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\????\????.lnk'
@@ -157,7 +157,7 @@ $Global:myMsg = @{
 
 $Global:yx = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx/bbwy_yx_0314/start.html'
 
-$Global:apiGitHub = @{
+$Global:gitApiGitHub = @{
     api                                  = 'https://api.github.com/'
     current_user_url                     = 'https://api.github.com/user'
     current_user_authorizations_html_url = 'https://github.com/settings/connections/applications{/client_id}'
