@@ -31,6 +31,7 @@ $Global:documentNetUrl = @{
     antMobile   = 'https://antd-mobile.gitee.io/docs/react/introduce-cn'
     antDesign   = 'http://ant-design.gitee.io/docs/react/introduce-cn'
     dva         = 'https://github.com/dvajs/dva/blob/master/README_zh-CN.md'
+    wepy        = 'https://tencent.github.io/wepy/document.html#/'
 }
 
 $Global:myWorkPathHash = @{
@@ -66,7 +67,7 @@ $Global:myWorkPathHash = @{
     rider64Data         = 'E:\DataIn\RiderData\newTestSmallCode\Solution1\ConsoleApplication1\bin\Debug'
     rider64EXEData      = 'E:\DataIn\RiderData\newTestSmallCode\Solution1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe'
     consultantMobile    = 'E:\DataIn\WorkFor\customerManage\consultantMobile'
-    consultantYX        = 'https://free.modao.cc/app/4z8fpIEPJTlYdqm8XcPU9j6vAOVGRP3#screen=sA79478420D1524817302322'
+    newConsultantM      = 'E:\DataIn\G_work\customerManage\consultantMobile'
     testLayout          = 'file:///E:/DataIn/vscodedata/newtestlayout/index.html'
 
     gitTmpCanBeDel      = 'E:\DataIn\GitHub_download_data\tmp_canDelete'
@@ -74,6 +75,13 @@ $Global:myWorkPathHash = @{
 
     tmp_canDelete       = 'E:\DataIn\GitHub_download_data\tmp_canDelete'
     rollupTest          = 'E:\DataIn\VScodeData\quickUtils\rollupTest'
+    dengbangtimin       = 'E:\DataIn\WorkFor\dengbangtiming\wxapp'
+    
+    YX                  = @{
+        dengbangtimingYX = 'E:\DataIn\WorkFor\DescriptionDocument\dengbangtimin\dbtm\index.html'
+        bubuweiying      = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx/bbwy_yx_0314/start.html'
+        consultantYX     = 'https://free.modao.cc/app/4z8fpIEPJTlYdqm8XcPU9j6vAOVGRP3#screen=sA79478420D1524817302322'
+    }
 }
 
 $Global:programPathHash = @{
@@ -155,7 +163,6 @@ $Global:myMsg = @{
 
 }
 
-$Global:yx = 'file:///E:/DataIn/WorkFor/DescriptionDocument/bubuweiying/yx/bbwy_yx_0314/start.html'
 
 $Global:gitApiGitHub = @{
     api                                  = 'https://api.github.com/'
@@ -196,4 +203,8 @@ $Global:gitApiGitHub = @{
 
     gist_detail_eg1                      = 'https://api.github.com/gists/09591a0e01c7c380afdfedea3e76c501'
     developerV3                          = 'https://developer.github.com/v3/repos/'
+}
+
+$Global:xmAppId = @{
+    dengbangtiming = 'wxa67261af1ec8ce4b'
 }

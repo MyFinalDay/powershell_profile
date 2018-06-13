@@ -471,3 +471,17 @@ Github repo: https://github.com/clymb3r/PowerShell
 
     return $ReturnInfo
 }
+
+function shellTscFile {
+    $tsFilePath = E:\UserSoft\Ecmas\emacs-26.1-x86_64\RecentFlie\tsFile\type.ts
+    $jsFilePath = E:\UserSoft\Ecmas\emacs-26.1-x86_64\RecentFlie\tsFile\type.js
+    
+    $tscRes = tsc.cmd $tsFilePath
+    $tscRes
+    if ($tscRes -ne $null) {
+        $tscRes
+    }
+    else {
+        node $jsFilePath
+    }
+}

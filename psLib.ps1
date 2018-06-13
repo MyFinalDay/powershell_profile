@@ -93,14 +93,38 @@ function wsAll {
         $pg
     )
 
-    $process = handleSpeicalSymbol $pg
-    # $pgStr = [System.Enum]::GetName([ProgramEnum], [ProgramEnum]$pg)
-    # $pgStr
-    # $pgEnum = [System.Enum]::Parse([ProgramEnum], "qq")
-    # $pgEnum.GetType()
+    function isProcessRunning {
+        param(
+            [string]
+            $process
+        )
+        
+        if ( ( Get-Process | Where-Object {$_.Name -eq $process} ) -ne $null ) {
+            $true
+        }
+        else {
+            $false
+        }
+    }
 
-    $processWs = getPsSum($process)
-    $processWs
+    $process = handleSpeicalSymbol $pg
+    if ( isProcessRunning $process ) {
+        $processWs = getPsSum($process)
+        $processWs
+    }
+    else {
+        $maybeRes = [enum]::GetNames([ProgramEnum]) |
+            Where-Object {$_.toLower().StartsWith($process.Substring(0, 1).toLower())} |
+            Where-Object {isProcessRunning $_}
+        if ( $maybeRes -ne $null ) {
+            Write-Host "`nDo you mean?`n"
+            $maybeRes
+            Write-Host ""
+        }
+        else {
+            Write-Host "`nNo such process!`n"
+        }
+    }
 }
 function wsAllNoraml {
     # Get process WorkingSet eg. wsAllNoraml firefox -> 632MB 5
@@ -858,7 +882,7 @@ function zs {
         }
 
         gTools {
-            pg gvim E:\DataIn\MyNote\tool_key.js
+            pg gvim E:\UserSoft\Ecmas\emacs-26.1-x86_64\RecentFlie\noteFile\tool_key.js
         }
 
         testJs {
@@ -964,14 +988,22 @@ function zWorkCleanCachedAndKillNode {
     $ProgramNodeCnt = (Get-Process | Measure-Object).Count
     if ($ProgramNodeCnt -ne 0) {
         Stop-Process -Name node 
+        $buildCachedFilePath = 
+        'E:\DataIn\WorkFor\customerManage\consultantMobile\node_modules\.cache\hard-source\2b791c7d198d01d5770db24bfafbe2a1024c3a82b3f51646b1049599eae25281'
+
         $cachedFilePath = 'E:\DataIn\WorkFor\customerManage\consultantMobile\node_modules\.cache\hard-source\a46b2c3f7582d91717f14d4898282db2a8c6f33499ff80145e10b7a50c53e255'
 
-        Remove-Item -Recurse $cachedFilePath
-
+        if (Test-Path $buildCachedFilePath) {
+            Remove-Item -Recurse $buildCachedFilePath
+        }
+        elseif (Test-Path $cachedFilePath) {
+            Remove-Item -Recurse $cachedFilePath
+        }
     }
     else {
         Write-Host "\nno process node"
     }
+
     $ErrorActionPreference = "Continue"
 }
 
@@ -986,4 +1018,17 @@ function replaceBackslashToSlash {
     )
 
     $i.ToString().Replace("\", "/")
+}
+
+function shellTscFile {
+    $tsFilePath = 'E:\UserSoft\Ecmas\emacs-26.1-x86_64\RecentFlie\tsFile\type.ts'
+    $jsFilePath = 'E:\UserSoft\Ecmas\emacs-26.1-x86_64\RecentFlie\tsFile\type.js'
+    
+    $tscRes = tsc.cmd $tsFilePath
+    if ($tscRes -ne $null) {
+        $tscRes
+    }
+    else {
+        node $jsFilePath
+    }
 }
